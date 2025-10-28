@@ -1,0 +1,672 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<coleccion_peliculas>
+
+
+
+
+
+
+
+
+    <nombre>Cine Clasico</nombre>
+
+
+
+
+
+
+
+
+    <ubicacion>Avenida del Cine 21</ubicacion>
+
+
+
+
+
+
+
+
+    <curador>Javier Mendez</curador>
+
+
+
+
+
+
+
+
+    <peliculas>
+
+
+
+
+
+
+
+
+        <pelicula id="1">
+
+
+
+
+
+
+
+
+            <titulo>El Padrino</titulo>
+
+
+
+
+
+
+
+
+            <director>Francis Ford Coppola</director>
+
+
+
+
+
+
+
+
+            <anno_estreno>1972</anno_estreno>
+
+
+
+
+
+
+
+
+            <genero>Drama</genero>
+
+
+
+
+
+
+
+
+            <recaudacion>245000000</recaudacion>
+
+
+
+
+
+
+
+
+        </pelicula>
+
+
+
+
+
+
+
+
+        <pelicula id="2">
+
+
+
+
+
+
+
+
+            <titulo>Casablanca</titulo>
+
+
+
+
+
+
+
+
+            <director>Michael Curtiz</director>
+
+
+
+
+
+
+
+
+            <anno_estreno>1942</anno_estreno>
+
+
+
+
+
+
+
+
+            <genero>Romance</genero>
+
+
+
+
+
+
+
+
+            <recaudacion>3680000</recaudacion>
+
+
+
+
+
+
+
+
+        </pelicula>
+
+
+
+
+
+
+
+
+        <pelicula id="3">
+
+
+
+
+
+
+
+
+            <titulo>Ciudadano Kane</titulo>
+
+
+
+
+
+
+
+
+            <director>Orson Welles</director>
+
+
+
+
+
+
+
+
+            <anno_estreno>1941</anno_estreno>
+
+
+
+
+
+
+
+
+            <genero>Drama</genero>
+
+
+
+
+
+
+
+
+            <recaudacion>1700000</recaudacion>
+
+
+
+
+
+
+
+
+        </pelicula>
+
+
+
+
+
+
+
+
+        <pelicula id="4">
+
+
+
+
+
+
+
+
+            <titulo>Pulp Fiction</titulo>
+
+
+
+
+
+
+
+
+            <director>Quentin Tarantino</director>
+
+
+
+
+
+
+
+
+            <anno_estreno>1994</anno_estreno>
+
+
+
+
+
+
+
+
+            <genero>Crimen</genero>
+
+
+
+
+
+
+
+
+            <recaudacion>4.437504E8</recaudacion>
+
+
+
+
+
+
+
+
+        </pelicula>
+
+
+
+
+
+
+
+
+        <pelicula id="5">
+
+
+
+
+
+
+
+
+            <titulo>Lo que el viento se llevo</titulo>
+
+
+
+
+
+
+
+
+            <director>Victor Fleming</director>
+
+
+
+
+
+
+
+
+            <anno_estreno>1939</anno_estreno>
+
+
+
+
+
+
+
+
+            <genero>Romance</genero>
+
+
+
+
+
+
+
+
+            <recaudacion>402000000</recaudacion>
+
+
+
+
+
+
+
+
+        </pelicula>
+
+
+
+
+
+
+
+
+        <pelicula id="6">
+
+
+
+
+
+
+
+
+            <titulo>La lista de Schindler</titulo>
+
+
+
+
+
+
+
+
+            <director>Steven Spielberg</director>
+
+
+
+
+
+
+
+
+            <anno_estreno>1993</anno_estreno>
+
+
+
+
+
+
+
+
+            <genero>Historico</genero>
+
+
+
+
+
+
+
+
+            <recaudacion>322000000</recaudacion>
+
+
+
+
+
+
+
+
+        </pelicula>
+
+
+
+
+
+
+
+
+        <pelicula id="7">
+
+
+
+
+
+
+
+
+            <titulo>Psicosis</titulo>
+
+
+
+
+
+
+
+
+            <director>Alfred Hitchcock</director>
+
+
+
+
+
+
+
+
+            <anno_estreno>1960</anno_estreno>
+
+
+
+
+
+
+
+
+            <genero>Terror</genero>
+
+
+
+
+
+
+
+
+            <recaudacion>50000000</recaudacion>
+
+
+
+
+
+
+
+
+        </pelicula>
+
+
+
+
+
+
+
+
+        <pelicula id="8">
+
+
+
+
+
+
+
+
+            <titulo>El bueno, el malo y el feo</titulo>
+
+
+
+
+
+
+
+
+            <director>Sergio Leone</director>
+
+
+
+
+
+
+
+
+            <anno_estreno>1966</anno_estreno>
+
+
+
+
+
+
+
+
+            <genero>Western</genero>
+
+
+
+
+
+
+
+
+            <recaudacion>25000000</recaudacion>
+
+
+
+
+
+
+
+
+        </pelicula>
+
+
+
+
+
+
+
+
+        <pelicula id="9">
+
+
+
+
+
+
+            <titulo>Dune: Part Two</titulo>
+
+
+
+
+
+
+            <director>Denis Villeneuve</director>
+
+
+
+
+
+
+            <anno_estreno>2024</anno_estreno>
+
+
+
+
+
+
+            <genero>Ciencia Ficción</genero>
+
+
+
+
+
+
+            <recaudacion>7.11E8</recaudacion>
+
+
+
+
+
+
+        </pelicula>
+
+
+
+
+
+
+        <pelicula id="10">
+
+
+
+
+            <titulo>Dune: Part Two</titulo>
+
+
+
+
+            <director>Denis Villeneuve</director>
+
+
+
+
+            <anno_estreno>2024</anno_estreno>
+
+
+
+
+            <genero>Ciencia Ficción</genero>
+
+
+
+
+            <recaudacion>7.11E8</recaudacion>
+
+
+
+
+        </pelicula>
+
+
+
+
+        <pelicula id="11">
+
+
+            <titulo>Dune: Part Two</titulo>
+
+
+            <director>Denis Villeneuve</director>
+
+
+            <anno_estreno>2024</anno_estreno>
+
+
+            <genero>Ciencia Ficción</genero>
+
+
+            <recaudacion>7.11E8</recaudacion>
+
+
+        </pelicula>
+
+
+        <pelicula id="12">
+            <titulo>Dune: Part Two</titulo>
+            <director>Denis Villeneuve</director>
+            <anno_estreno>2024</anno_estreno>
+            <genero>Ciencia Ficción</genero>
+            <recaudacion>7.11E8</recaudacion>
+        </pelicula>
+    </peliculas>
+
+
+
+
+
+
+
+
+</coleccion_peliculas>

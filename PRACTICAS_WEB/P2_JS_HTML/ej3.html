@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Ej3 - Validar formulario</title>
+    <style>
+        input {
+            padding: 8px;
+            font-size: 16px;
+            width: 250px;
+        }
+        button {
+            padding: 8px 12px;
+            font-size: 16px;
+        }
+        #mensaje {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <form id="miFormulario">
+        <input type="email" id="email" placeholder="Escribe tu correo">
+        <button type="submit">Enviar</button>
+        <p id="mensaje"></p>
+    </form>
+
+    <script>
+        document.getElementById("miFormulario").onsubmit = function(event) {
+            let email = document.getElementById("email").value.trim();
+            let mensaje = document.getElementById("mensaje");
+            
+            if (email === "") {
+                event.preventDefault();
+                mensaje.textContent = "El campo no puede estar vacío";
+                mensaje.style.color = "red";
+            } else {
+                mensaje.textContent = "Formulario enviado correctamente";
+                mensaje.style.color = "green";
+            }
+        };
+    </script>
+</body>
+</html>

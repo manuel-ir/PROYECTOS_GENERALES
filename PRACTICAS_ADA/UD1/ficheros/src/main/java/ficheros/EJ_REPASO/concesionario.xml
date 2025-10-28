@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<concesionario>
+    
+  <nombre>Concesionario DAM</nombre>
+    
+  <direccion>Calle Falsa, 123</direccion>
+    
+  <coches>
+        
+    <coche matricula="1234ABC">
+            
+      <marca>Ford</marca>
+            
+      <modelo>Focus</modelo>
+            
+      <kilometros>5000</kilometros>
+            
+      <estado>5</estado>
+            
+      <ano_fabricacion>2022</ano_fabricacion>
+          
+    </coche>
+        
+    <coche matricula="4567DEF">
+            
+      <marca>Renault</marca>
+            
+      <modelo>Clio</modelo>
+            
+      <kilometros>95000</kilometros>
+            
+      <estado>3</estado>
+            
+      <ano_fabricacion>2010</ano_fabricacion>
+          
+    </coche>
+        
+    <coche matricula="8901GHI">
+            
+      <marca>Seat</marca>
+            
+      <modelo>Ibiza</modelo>
+            
+      <kilometros>150000</kilometros>
+            
+      <estado>2</estado>
+            
+      <ano_fabricacion>2005</ano_fabricacion>
+          
+    </coche>
+        
+    <coche matricula="1122JKL">
+            
+      <marca>Toyota</marca>
+            
+      <modelo>Yaris</modelo>
+            
+      <kilometros>8500</kilometros>
+            
+      <estado>4</estado>
+            
+      <ano_fabricacion>2021</ano_fabricacion>
+          
+    </coche>
+      
+  </coches>
+  
+</concesionario>

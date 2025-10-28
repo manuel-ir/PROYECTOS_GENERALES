@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Ej2 - Contador de caracteres</title>
+    <style>
+        input {
+            padding: 8px;
+            font-size: 16px;
+            width: 300px;
+        }
+        p {
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <input type="text" id="campoTexto" placeholder="Escribe algo...">
+    <p>Caracteres escritos: <span id="contador">0</span></p>
+
+    <script>
+        document.getElementById("campoTexto").oninput = function() {
+            document.getElementById("contador").textContent = this.value.length;
+        };
+    </script>
+</body>
+</html>

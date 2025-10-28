@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Ej1 - Cambiar fondo</title>
+    <style>
+        button {
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <button id="cambiarFondo">Cambiar fondo a verde</button>
+
+    <script>
+        document.getElementById("cambiarFondo").onclick = function() {
+            document.body.style.backgroundColor = "green";
+        };
+    </script>
+</body>
+</html>

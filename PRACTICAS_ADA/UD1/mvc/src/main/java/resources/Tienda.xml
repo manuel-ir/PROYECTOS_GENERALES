@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Tienda>
+    <NombreTienda>GamePlanet</NombreTienda>
+    <Perifericos>
+        <Periferico id="P001">
+            <Compatibilidad>PS5 / PC</Compatibilidad>
+            <Descripcion>Mando inalámbrico con retroháptica avanzada y gatillos adaptativos</Descripcion>
+            <Nombre>Mando Inalámbrico DualForce</Nombre>
+            <Precio>69.99</Precio>
+            <Stock>25</Stock>
+            <Tipo>Mando</Tipo>
+        </Periferico>
+        <Periferico id="P002">
+            <Compatibilidad>PC / Xbox / PS5</Compatibilidad>
+            <Descripcion>Auriculares gaming con sonido surround 7.1 y cancelación de ruido</Descripcion>
+            <Nombre>Auriculares Surround GX7</Nombre>
+            <Precio>89.99</Precio>
+            <Stock>15</Stock>
+            <Tipo>Auriculares</Tipo>
+        </Periferico>
+        <Periferico id="P003">
+            <Compatibilidad>Pc</Compatibilidad>
+            <Descripcion>El mas rapido</Descripcion>
+            <Nombre>Raton Inalambrico</Nombre>
+            <Precio>35.0</Precio>
+            <Stock>20</Stock>
+            <Tipo>Raton</Tipo>
+        </Periferico>
+    </Perifericos>
+    <Ubicacion>Madrid, España</Ubicacion>
+    <Videojuegos>
+        <Videojuego id="J001">
+            <Clasificacion>16+</Clasificacion>
+            <Descripcion> Videojuego de acción y sigilo ambientado en un mundo futurista dominado por
+        corporaciones.</Descripcion>
+            <Duracion>25 horas</Duracion>
+            <Lanzamiento>2024-09-10</Lanzamiento>
+            <Nombre>Shadow Runner</Nombre>
+            <Plataforma>PS5</Plataforma>
+            <Precio>59.99</Precio>
+        </Videojuego>
+        <Videojuego id="J002">
+            <Clasificacion>12+</Clasificacion>
+            <Descripcion>Aventura narrativa ambientada en un archipiélago misterioso lleno de secretos
+        antiguos.</Descripcion>
+            <Duracion>30 horas</Duracion>
+            <Lanzamiento>2022-07-15</Lanzamiento>
+            <Nombre>Echoes of the Sea</Nombre>
+            <Plataforma>Switch</Plataforma>
+            <Precio>39.99</Precio>
+        </Videojuego>
+        <Videojuego id="J003">
+            <Clasificacion>12+</Clasificacion>
+            <Descripcion>Videojuego de rol clásico con combate por turnos y un sistema de decisiones que
+        afecta el final.</Descripcion>
+            <Duracion>80 horas</Duracion>
+            <Lanzamiento>2025-02-20</Lanzamiento>
+            <Nombre>Chrono Realms</Nombre>
+            <Plataforma>PC</Plataforma>
+            <Precio>69.99</Precio>
+        </Videojuego>
+        <Videojuego id="J004">
+            <Clasificacion>3+</Clasificacion>
+            <Descripcion>Simulador de fútbol con licencias oficiales, modo historia y soporte online.</Descripcion>
+            <Duracion>Sin límite (modo carrera)</Duracion>
+            <Lanzamiento>2025-09-01</Lanzamiento>
+            <Nombre>Ultimate Soccer 25</Nombre>
+            <Plataforma>Xbox Series X</Plataforma>
+            <Precio>59.99</Precio>
+        </Videojuego>
+        <Videojuego id="J005">
+            <Clasificacion>7+</Clasificacion>
+            <Descripcion>Construye tu civilización desde cero y lidera tu imperio hacia la victoria a
+        través de la diplomacia y la guerra.</Descripcion>
+            <Duracion>60 horas</Duracion>
+            <Lanzamiento>2023-12-05</Lanzamiento>
+            <Nombre>Empire Minds</Nombre>
+            <Plataforma>PC</Plataforma>
+            <Precio>44.99</Precio>
+        </Videojuego>
+    </Videojuegos>
+</Tienda>
