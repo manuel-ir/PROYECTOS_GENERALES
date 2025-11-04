@@ -1,15 +1,15 @@
-package ud2;
+package ud2.EJ1;
 
 import java.sql.*;
 
-public class Conexion {
-
-    private String url = "jdbc:mysql://localhost:3306/tienda";
+public class Empresa {
+    
+private String url = "jdbc:mysql://localhost:3306/tienda";
     private String user = "root";
     private String password = "1234";
     private Connection con;
 
-    public Conexion() throws SQLException {
+    public Empresa() throws SQLException {
         con = DriverManager.getConnection(url, user, password);
 
     }
@@ -32,4 +32,6 @@ public class Conexion {
     public Connection getCon() {
         return con;
     }
+
+    
 }
