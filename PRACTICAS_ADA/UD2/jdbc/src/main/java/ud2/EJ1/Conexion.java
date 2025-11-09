@@ -2,14 +2,14 @@ package ud2.EJ1;
 
 import java.sql.*;
 
-public class Empresa {
+public class Conexion {
     
 private String url = "jdbc:mysql://localhost:3306/tienda";
     private String user = "root";
     private String password = "1234";
     private Connection con;
 
-    public Empresa() throws SQLException {
+    public Conexion() throws SQLException {
         con = DriverManager.getConnection(url, user, password);
 
     }
