@@ -114,8 +114,9 @@ h1, h2, h3 {
     background-color: #e0a800;
 }
 
-/* Posicionamiento del botón de modo en el login */
-#pagina-login .btn-modo {
+/* Posicionamiento del botón de modo en login/index */
+#pagina-login .btn-modo,
+#pagina-index .btn-modo {
     position: absolute;
     top: 10px;
     right: 10px;
@@ -162,7 +163,7 @@ h1, h2, h3 {
 }
 
 
-/* --- ESTILOS DEL MODO OSCURO AÑADIDOS --- */
+/* --- ESTILOS DEL MODO OSCURO --- */
 body.dark-mode {
     background-color: #222;
     color: #e0e0e0;

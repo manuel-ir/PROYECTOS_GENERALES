@@ -1,22 +1,17 @@
-// Espera a que todo el contenido del DOM esté cargado antes de ejecutar el script
 document.addEventListener("DOMContentLoaded", function() {
 
-    // --- LÓGICA COMÚN A VARIAS PÁGINAS ---
+    // LÓGICA COMÚN A VARIAS PÁGINAS 
 
-    // 1. LÓGICA MODO OSCURO
+    // LÓGICA MODO OSCURO
     const botonModo = document.getElementById("boton-modo");
     
-    // Al cargar la página, comprueba si el modo oscuro estaba guardado
     if (localStorage.getItem("modo") === "dark") {
         document.body.classList.add("dark-mode");
     }
 
     if (botonModo) {
         botonModo.addEventListener("click", function() {
-            // Alterna la clase en el body
             document.body.classList.toggle("dark-mode");
-            
-            // Guarda la preferencia en localStorage
             if (document.body.classList.contains("dark-mode")) {
                 localStorage.setItem("modo", "dark");
             } else {
@@ -25,30 +20,29 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
     
-    // 2. LÓGICA BOTÓN CERRAR SESIÓN
+    // LÓGICA BOTÓN CERRAR SESIÓN 
     const botonLogout = document.getElementById("boton-logout");
     if (botonLogout) {
         botonLogout.addEventListener("click", function() {
-            // Borra todos los datos guardados
             localStorage.clear();
-            // Redirige al login
             window.location.href = "login.html";
         });
     }
 
-    // 3. LÓGICA VERIFICACIÓN DE SESIÓN
+    // LÓGICA VERIFICACIÓN DE SESIÓN
     const pageId = document.body.id; 
     const usuario = localStorage.getItem("usuario"); 
 
-    if (pageId !== "pagina-login" && !usuario) {
+    
+    if (pageId !== "pagina-login" && pageId !== "pagina-index" && !usuario) {
         alert("Debes iniciar sesión para acceder a esta página.");
         window.location.href = "login.html";
         return; 
     }
 
-    // --- LÓGICA POR PÁGINA ---
+    // LÓGICA POR PÁGINA 
 
-    // 1. LÓGICA PARA: pagina-login
+    // LÓGICA login
     if (pageId === "pagina-login") {
         const formLogin = document.getElementById("form-login");
         const emailInput = document.getElementById("email");
@@ -61,30 +55,39 @@ document.addEventListener("DOMContentLoaded", function() {
             const email = emailInput.value.trim();
             const password = passwordInput.value.trim();
             
-            // --- VALIDACIONES ACTUALIZADAS ---
+            // Validaciones 
             if (email === "" || password === "") {
                 mensajeError.textContent = "Ambos campos son obligatorios.";
             } else if (!email.includes("@")) { 
                 mensajeError.textContent = "Por favor, introduce un correo válido.";
-            } else if (password.length < 9) {
+            } else if (password.length < 9) { // Contraseña mínima de 9 caracteres
                 mensajeError.textContent = "La contraseña debe tener al menos 9 caracteres.";
             } else {
-                // Éxito: Simulación de inicio de sesión
+                
                 mensajeError.textContent = "";
                 localStorage.setItem("usuario", email);
-                window.location.href = "index.html";
+                
+                // Redirige a 'reserva.html'
+                window.location.href = "reserva.html"; 
             }
         });
     }
 
-    // 2. LÓGICA PARA: pagina-index
+    // 2. LÓGICA index
     else if (pageId === "pagina-index") {
-        const mensajeBienvenida = document.getElementById("mensaje-bienvenida");
-        mensajeBienvenida.textContent = `Bienvenido/a, ${usuario}. Gracias por iniciar sesión.`;
+        
     }
 
-    // 3. LÓGICA PARA: pagina-reserva
+    // 3. LÓGICA reserva
     else if (pageId === "pagina-reserva") {
+    
+        // Añade el mensaje de bienvenida
+        const mensajeBienvenida = document.getElementById("mensaje-bienvenida");
+        if (mensajeBienvenida) {
+            mensajeBienvenida.textContent = `Bienvenido/a, ${usuario}. Gestiona tu reserva.`;
+        }
+
+        // Almacena los elementos del formulario en constantes
         const formReserva = document.getElementById("form-reserva");
         const selectEvento = document.getElementById("evento");
         const inputEntradas = document.getElementById("entradas");
@@ -93,42 +96,56 @@ document.addEventListener("DOMContentLoaded", function() {
         const textareaComentarios = document.getElementById("comentarios");
         const spanContador = document.getElementById("contador-caracteres");
 
+        // Define la función parta calcular el precio total
         function calcularTotal() {
+
+            // Convierte valores de texto a número
             let precioEvento = parseFloat(selectEvento.value) || 0;
             let numEntradas = parseInt(inputEntradas.value) || 1;
             
             let totalExtras = 0;
+
+            // Suma el precio de los extras seleccionados
             checkboxesExtra.forEach(function(checkbox) { 
                 if (checkbox.checked) {
                     totalExtras += parseFloat(checkbox.value); 
                 }
             });
             
+            // Calcula el precio total de los extras marcados
             let precioTotal = (precioEvento + totalExtras) * numEntradas;
             spanPrecioTotal.textContent = precioTotal.toFixed(2);
         }
 
+        // Contador de caracteres
         textareaComentarios.addEventListener("input", function() {
             const longitud = textareaComentarios.value.length; 
             spanContador.textContent = `${longitud}/200`;
         });
 
+        // Asigna la función calcularTotal a los eventos 
+        // Y es llamado cada vez que el usuario cambia de opción
         selectEvento.addEventListener("change", calcularTotal);
         inputEntradas.addEventListener("input", calcularTotal);
         checkboxesExtra.forEach(function(checkbox) {
             checkbox.addEventListener("change", calcularTotal);
         });
 
+        // Evento para enviar el formulario
         formReserva.addEventListener("submit", function(event) {
             event.preventDefault(); 
             
+            // Validación básica
             if (selectEvento.value === "") {
                 alert("Por favor, selecciona un evento.");
                 return;
             }
 
+            // Obtiene el texto del evento seleccionado
             const eventoTexto = selectEvento.options[selectEvento.selectedIndex].text;
             const extrasSeleccionados = [];
+
+            // Recorre los extras para obtener sus nombres
             checkboxesExtra.forEach(function(checkbox) {
                 if (checkbox.checked) {
                     const label = document.querySelector(`label[for="${checkbox.id}"]`);
@@ -136,6 +153,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
             });
 
+            // Crea un obejeto con los datos de la reserva
             const datosReserva = {
                 evento: eventoTexto,
                 entradas: inputEntradas.value,
@@ -144,6 +162,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 precioTotal: spanPrecioTotal.textContent
             };
             
+            // Guarda el objeto como String JSON en localStorage
             localStorage.setItem("reserva", JSON.stringify(datosReserva));
             window.location.href = "resumen.html";
         });
@@ -151,14 +170,18 @@ document.addEventListener("DOMContentLoaded", function() {
         calcularTotal();
     }
 
-    // 4. LÓGICA PARA: pagina-resumen
+    // 4. LÓGICA resumen
     else if (pageId === "pagina-resumen") {
         const divResumen = document.getElementById("resumen-detalles");
+
+        // Obtiene el string JSON de la reserva
         const datosGuardados = localStorage.getItem("reserva");
         
+        // Convierte el string de vuelta a un objeto JS
         if (datosGuardados) {
             const reserva = JSON.parse(datosGuardados);
             
+            // Inserta el bloque de HTML con los datalles de la reserva
             divResumen.innerHTML = `
                 <p><strong>Evento:</strong> ${reserva.evento}</p>
                 <p><strong>Número de Entradas:</strong> ${reserva.entradas}</p>
@@ -169,6 +192,8 @@ document.addEventListener("DOMContentLoaded", function() {
             `; 
             
         } else {
+
+            // Muestra un error si no hay datos guardados
             divResumen.innerHTML = "<p>No se ha encontrado ninguna reserva. Por favor, realiza una reserva primero.</p>";
         }
     }
