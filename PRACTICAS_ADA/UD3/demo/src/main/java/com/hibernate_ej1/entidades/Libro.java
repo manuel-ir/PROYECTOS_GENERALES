@@ -3,37 +3,38 @@ package com.hibernate_ej1.entidades;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "LIBRO")
-
+@Table(name = "Libro")
 public class Libro {
 
     @Id
-    @Column(name = "id")
     private int id;
 
-    @Column(name = "autor", length = 20, unique = true)
+    @Column(length = 20, unique = true)
     private String autor;
 
-    @Column(name = "titulo", length = 30)
+    @Column(length = 30)
     private String titulo;
 
-    @Column(name = "estado", length = 20, nullable = false)
+    @Column(length = 20, nullable = false)
     private String estado;
 
     @Column(name = "n_paginas", nullable = false)
-    private int n_paginas;
+    private int nPaginas;
 
+    // Constructor vacio
     public Libro() {
     }
 
-    public Libro(int id, String autor, String titulo, String estado, int n_paginas) {
+    // Constructor con parámetros
+    public Libro(int id, String autor, String titulo, String estado, int nPaginas) {
         this.id = id;
         this.autor = autor;
         this.titulo = titulo;
         this.estado = estado;
-        this.n_paginas = n_paginas;
+        this.nPaginas = nPaginas;
     }
 
+    // Getters y Setters 
     public int getId() {
         return id;
     }
@@ -66,16 +67,13 @@ public class Libro {
         this.estado = estado;
     }
 
-    public int getN_paginas() {
-        return n_paginas;
+    public int getnPaginas() {
+        return nPaginas;
     }
 
-    public void setN_paginas(int n_paginas) {
-        this.n_paginas = n_paginas;
+    public void setnPaginas(int nPaginas) {
+        this.nPaginas = nPaginas;
     }
-
-    
-
 }
 
 

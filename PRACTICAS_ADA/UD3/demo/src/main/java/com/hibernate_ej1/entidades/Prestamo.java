@@ -1,67 +1,56 @@
 package com.hibernate_ej1.entidades;
 
-import java.sql.Date;
 import jakarta.persistence.*;
+import java.util.Date;
 
 @Entity
-@Table(name = "PRESTAMO")
+@Table(name = "Prestamo")
 public class Prestamo {
-    
-    @Id
-    @Column(name = "id")
-    private int id_libro;
 
-    @Column(name = "id_usuario")
-    private int id_usuario;
+    @EmbeddedId
+    private PrestamoId id;
 
-    @Column(nullable = false, unique = true)
-    private Date fecha_inicio;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "fecha_inicio", nullable = false, unique = true)
+    private Date fechaInicio;
 
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "fecha_fin")
-    private Date fecha_fin;
+    private Date fechaFin;
 
-
+    // Constructor vacío
     public Prestamo() {
     }
 
-    public Prestamo(int id_libro, int id_usuario, Date fecha_inicio, Date fecha_fin) {
-        this.id_libro = id_libro;
-        this.id_usuario = id_usuario;
-        this.fecha_inicio = fecha_inicio;
-        this.fecha_fin = fecha_fin;
+    // Constructor con parámetros
+    public Prestamo(PrestamoId id, Date fechaInicio, Date fechaFin) {
+        this.id = id;
+        this.fechaInicio = fechaInicio;
+        this.fechaFin = fechaFin;
     }
 
-    public int getId_libro() {
-        return id_libro;
+    // Getters y Setters 
+    public PrestamoId getId() {
+        return id;
     }
 
-    public void setId_libro(int id_libro) {
-        this.id_libro = id_libro;
+    public void setId(PrestamoId id) {
+        this.id = id;
     }
 
-    public int getId_usuario() {
-        return id_usuario;
+    public Date getFechaInicio() {
+        return fechaInicio;
     }
 
-    public void setId_usuario(int id_usuario) {
-        this.id_usuario = id_usuario;
+    public void setFechaInicio(Date fechaInicio) {
+        this.fechaInicio = fechaInicio;
     }
 
-    public Date getFecha_inicio() {
-        return fecha_inicio;
+    public Date getFechaFin() {
+        return fechaFin;
     }
 
-    public void setFecha_inicio(Date fecha_inicio) {
-        this.fecha_inicio = fecha_inicio;
+    public void setFechaFin(Date fechaFin) {
+        this.fechaFin = fechaFin;
     }
-
-    public Date getFecha_fin() {
-        return fecha_fin;
-    }
-
-    public void setFecha_fin(Date fecha_fin) {
-        this.fecha_fin = fecha_fin;
-    }
-
-    
 }
