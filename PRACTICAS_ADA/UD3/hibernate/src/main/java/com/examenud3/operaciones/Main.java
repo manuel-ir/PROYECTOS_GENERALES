@@ -108,9 +108,9 @@ public class Main {
 
         em.getTransaction().commit();
 
-       // APARTADO C: MOSTRAMOS LOS DATOS
+               // APARTADO C: MOSTRAR DATOS
          
-        System.out.println("\n APARTADO C: MOSTRAR LOS DATOS ");
+        System.out.println("\n  CONSULTAS  ");
 
         // 1. Asignaturas del alumno 7
         System.out.println("   Asignaturas Alumno 7   ");
@@ -119,14 +119,7 @@ public class Main {
             for (Asignatura as : a7_db.getAsignaturas()) System.out.println(as.getDasig());
         }
 
-        // 2. Alumnos en Acceso a Datos
-        System.out.println("\n   Alumnos en Acceso a Datos ");
-        try {
-            Asignatura acc = em.createQuery("SELECT a FROM Asignatura a WHERE a.dasig='Acceso a datos'", Asignatura.class).getSingleResult();
-            for (Alumno al : acc.getAlumnos()) System.out.println(al.getNoma());
-        } catch (Exception e) { System.out.println("Asignatura no encontrada"); }
-
-        // 3. Asignaturas de cada profesor
+        // 2. Asignaturas de cada profesor
         System.out.println("\n   Asignaturas por Profesor   ");
         List<Profesor> profes = em.createQuery("SELECT p FROM Profesor p", Profesor.class).getResultList();
         for (Profesor p : profes) {
@@ -134,29 +127,52 @@ public class Main {
             for (Asignatura as : p.getAsignaturas()) System.out.println("  - " + as.getDasig());
         }
 
-        // APARTADO D: CONSULTAS
-         
-        System.out.println("\n APARTADO D: CONSULTAS ");
+        // 3. Alumnos en 'Acceso a datos'
+        System.out.println("\n   Alumnos en Acceso a datos   ");
+        try {
+            Asignatura acc = em.createQuery("SELECT a FROM Asignatura a WHERE a.dasig='Acceso a datos'", Asignatura.class).getSingleResult();
+            for (Alumno al : acc.getAlumnos()) System.out.println(al.getNoma());
+        } catch (Exception e) { System.out.println("Asignatura no encontrada"); }
 
-        // 1. Nombres de alumnos en Bases de Datos
-        System.out.println("   Alumnos en Bases de Datos ");
+
+         
+        // APARTADO D: JPQL
+         
+        System.out.println("\n  JPQL  ");
+
+        // 1. Nombres alumnos en 'Bases de Datos'
+        System.out.println("   Alumnos en Bases de Datos   ");
         TypedQuery<String> q1 = em.createQuery(
             "SELECT al.noma FROM Alumno al JOIN al.asignaturas asig WHERE asig.dasig = 'Bases de Datos'", String.class);
         for (String s : q1.getResultList()) System.out.println(s);
 
-        
+        // 2. Asignaturas de Rosa Serra Bárcena
+        System.out.println("\n   Asignaturas de Rosa Serra   ");
+        TypedQuery<Object[]> q2 = em.createQuery(
+            "SELECT asig.dasig, asig.cur FROM Alumno al JOIN al.asignaturas asig WHERE al.noma = :n", Object[].class);
+        q2.setParameter("n", "Rosa Serra Bárcena");
+        for (Object[] row : q2.getResultList()) System.out.println(row[0] + " (" + row[1] + ")");
+
         // 3. Num Asignaturas Profesor ID 1
-        System.out.println("\n   Num Asignaturas Profe 1 ");
+        System.out.println("\n   Num Asignaturas Profe 1   ");
         Long count = em.createQuery("SELECT COUNT(a) FROM Profesor p JOIN p.asignaturas a WHERE p.cprof=1", Long.class).getSingleResult();
         System.out.println("Total: " + count);
 
-       
+        // 4. Profesores de Fernando Riera Perera
+        System.out.println("\n   Profesores de Fernando Riera   ");
+        TypedQuery<String> q4 = em.createQuery(
+            "SELECT DISTINCT p.nomp FROM Alumno al JOIN al.asignaturas asig JOIN asig.profesor p WHERE al.noma = :n", String.class);
+        q4.setParameter("n", "Fernando Riera Perera");
+        for (String s : q4.getResultList()) System.out.println(s);
+
+
+         
         // APARTADO E: ACTUALIZACIONES
          
-        System.out.println("\n  APARTADO E: ACTUALIZACIONES");
+        System.out.println("\n  ACTUALIZACIONES  ");
         em.getTransaction().begin();
 
-        // 1. Modifica el alumno 5 y se matricula en 12
+        // 1. Modificar alumno 5 -> Matricular en 12
         Alumno al5_upd = em.find(Alumno.class, 5);
         Asignatura asig12 = em.find(Asignatura.class, 12);
         if (al5_upd != null && asig12 != null) {
@@ -173,9 +189,35 @@ public class Main {
             System.out.println("Profesor 4 renombrado");
         }
 
+        // 3. Nueva asignatura y profesor. Solo alumno 5 matriculado.
+        Profesor pnuevo = new Profesor(99, "Profesor Nuevo", "tarde");
+        Asignatura anueva = new Asignatura(99, "Asignatura Nueva", "primero");
+        pnuevo.addAsignatura(anueva); // Vincula prof-asig
+        em.persist(pnuevo); // Guarda ambos por cascade
+        
+        if (al5_upd != null) {
+            al5_upd.addAsignatura(anueva); // Matricula al alumno 5
+            System.out.println("Alumno 5 matriculado en asignatura nueva");
+        }
+
+        // 4. Sustituir profesor 6 por uno nuevo en sus asignaturas
+        Profesor sustituto = new Profesor(7, "Sustituto Gertrudis", "tarde");
+        em.persist(sustituto);
+        
+        Profesor p6_old = em.find(Profesor.class, 6);
+        if (p6_old != null) {
+            List<Asignatura> listaAsigs = List.copyOf(p6_old.getAsignaturas());
+            for (Asignatura a : listaAsigs) {
+                a.setProfesor(sustituto); // Cambia el dueño
+                sustituto.addAsignatura(a); // Añade al nuevo
+            }
+            p6_old.getAsignaturas().clear(); // El viejo se queda sin asignaturas
+            System.out.println("Profesor 6 sustituido");
+        }
+
         em.getTransaction().commit();
+
         em.close();
         emf.close();
-
     }
 }

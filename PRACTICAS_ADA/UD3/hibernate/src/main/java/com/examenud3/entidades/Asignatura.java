@@ -9,13 +9,13 @@ import java.util.List;
 public class Asignatura {
 
     @Id
-    @Column(name = "CASIG") // PK 
+    @Column(name = "CASIG") // PK
     private int casig;
 
     @Column(name = "DASIG", length = 50, nullable = false)
     private String dasig;
 
-    // Curso: No nulo, longitud 20 
+    // Curso: No nulo, longitud 20
     @Column(name = "CUR", length = 20, nullable = false)
     private String cur;
 
@@ -24,7 +24,7 @@ public class Asignatura {
     @JoinColumn(name = "CPROF", nullable = false)
     private Profesor profesor;
 
-    // Relación N:M con Alumno 
+    // Relación N:M con Alumno
     @ManyToMany(mappedBy = "asignaturas", fetch = FetchType.LAZY)
     private List<Alumno> alumnos = new ArrayList<>();
 

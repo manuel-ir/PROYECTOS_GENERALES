@@ -26,7 +26,7 @@ public class Alumno {
     @Column(name = "PROV", length = 50)
     private String prov;
 
-    // Beca: S/N 
+    // Beca: S/N
     @Column(name = "BECA", length = 1, nullable = false)
     private String beca;
 
