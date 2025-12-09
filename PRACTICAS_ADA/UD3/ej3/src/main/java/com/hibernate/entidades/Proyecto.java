@@ -1,0 +1,67 @@
+package com.hibernate.entidades;
+
+import jakarta.persistence.*;
+import java.time.LocalDate; // Usamos LocalDate para fechas sin hora
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Table(name = "PROYECTO")
+public class Proyecto {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    private String nombre;
+
+    @Column(name = "fecha_inicio")
+    private LocalDate fechaInicio;
+
+    // Si borramos el proyecto, borramos sus investigadores asociados con (CascadeType.ALL)
+    @OneToMany(mappedBy = "proyecto", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Investigador> investigadores = new ArrayList<>();
+
+    public Proyecto() {
+    }
+
+    public Proyecto(String nombre, LocalDate fechaInicio) {
+        this.nombre = nombre;
+        this.fechaInicio = fechaInicio;
+    }
+
+    // Método auxiliar para mantener la coherencia de la relación
+    public void addInvestigador(Investigador investigador) {
+        investigadores.add(investigador);
+        investigador.setProyecto(this);
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public LocalDate getFechaInicio() {
+        return fechaInicio;
+    }
+
+    public void setFechaInicio(LocalDate fechaInicio) {
+        this.fechaInicio = fechaInicio;
+    }
+
+    public List<Investigador> getInvestigadores() {
+        return investigadores;
+    }
+
+    @Override
+    public String toString() {
+        return nombre;
+    }
+}
