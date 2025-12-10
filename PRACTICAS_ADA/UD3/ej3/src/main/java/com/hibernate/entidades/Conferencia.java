@@ -1,7 +1,7 @@
 package com.hibernate.entidades;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime; // Usamos LocalDateTime para fecha Y hora
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,16 +11,19 @@ public class Conferencia {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID_CONFERENCIA")
     private int id;
 
+    @Column(name = "NOMBRE_CONF", length = 50, nullable = false)
     private String nombre;
 
-    @Column(name = "fecha_hora_inicio")
-    private LocalDateTime fechaHoraInicio; // Sin @Temporal
+    @Column(name = "FECHA_HORA_INICIO", nullable = false)
+    private LocalDateTime fechaHoraInicio; 
 
+    @Column(name = "LUGAR", length = 50, nullable = false)
     private String lugar;
 
-    @Column(name = "numero_horas")
+    @Column(name = "NUMERO_HORAS", nullable = false)
     private double numeroHoras;
 
     @ManyToMany(mappedBy = "conferencias")

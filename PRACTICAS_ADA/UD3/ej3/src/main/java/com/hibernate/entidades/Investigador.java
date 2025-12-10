@@ -10,23 +10,30 @@ public class Investigador {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID_INVESTIGADOR")
     private int id;
 
+    @Column(name = "DNI", length = 9, nullable = false, unique = true)
     private String dni;
 
     @Embedded
     private NombreCompletoInvestigador nombreCompleto;
 
+    @Column(name = "DIRECCION", length = 50)
     private String direccion;
+
+    @Column(name = "TELEFONO", length = 15)
     private String telefono;
+
+    @Column(name = "LOCALIDAD", length = 50)
     private String localidad;
 
     @ManyToOne
-    @JoinColumn(name = "id_proyecto")
+    @JoinColumn(name = "ID_PROYECTO", nullable = false) 
     private Proyecto proyecto;
 
-    @ManyToMany
-    @JoinTable(name = "ASISTENCIA", joinColumns = @JoinColumn(name = "id_investigador"), inverseJoinColumns = @JoinColumn(name = "id_conferencia"))
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @JoinTable(name = "ASISTENCIA_CONF", joinColumns = @JoinColumn(name = "ID_INVESTIGADOR"), inverseJoinColumns = @JoinColumn(name = "ID_CONFERENCIA"))
     private List<Conferencia> conferencias = new ArrayList<>();
 
     public Investigador() {
@@ -41,7 +48,6 @@ public class Investigador {
         this.localidad = localidad;
     }
 
-    // Métodos auxiliares para gestionar la relación N:M
     public void addConferencia(Conferencia conferencia) {
         this.conferencias.add(conferencia);
         conferencia.getInvestigadores().add(this);
@@ -51,6 +57,8 @@ public class Investigador {
         this.conferencias.remove(conferencia);
         conferencia.getInvestigadores().remove(this);
     }
+
+    // Getters y Setters
 
     public int getId() {
         return id;
@@ -74,6 +82,26 @@ public class Investigador {
 
     public List<Conferencia> getConferencias() {
         return conferencias;
+    }
+
+    public void setDni(String dni) {
+        this.dni = dni;
+    }
+
+    public void setNombreCompleto(NombreCompletoInvestigador nombreCompleto) {
+        this.nombreCompleto = nombreCompleto;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public void setLocalidad(String localidad) {
+        this.localidad = localidad;
     }
 
     @Override

@@ -1,11 +1,15 @@
 package com.hibernate.entidades;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
 @Embeddable
 public class NombreCompletoInvestigador {
 
+    @Column(name = "NOMBRE", length = 50, nullable = false)
     private String nombre;
+
+    @Column(name = "APELLIDOS", length = 50, nullable = false)
     private String apellidos;
 
     public NombreCompletoInvestigador() {

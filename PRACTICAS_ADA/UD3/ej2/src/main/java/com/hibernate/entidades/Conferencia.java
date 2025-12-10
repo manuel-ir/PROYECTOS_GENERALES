@@ -11,21 +11,21 @@ public class Conferencia {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID_CONFERENCIA")
     private int id;
 
+    @Column(name = "NOMBRE_CONF", length = 50, nullable = false)
     private String nombre;
 
-    @Column(name = "fecha_hora_inicio")
-    private LocalDateTime fechaHoraInicio; // Usa LocalDateTime para fechas con hora precisa
+    @Column(name = "FECHA_HORA_INICIO", nullable = false)
+    private LocalDateTime fechaHoraInicio; 
 
+    @Column(name = "LUGAR", length = 50, nullable = false)
     private String lugar;
 
-    @Column(name = "numero_horas")
+    @Column(name = "NUMERO_HORAS", nullable = false)
     private double numeroHoras;
 
-    // Configura la parte inversa de la relación Muchos a Muchos
-    // mappedBy: Indica que la configuración de la tabla intermedia está en la clase
-    // 'Investigador'
     @ManyToMany(mappedBy = "conferencias")
     private List<Investigador> investigadores = new ArrayList<>();
 

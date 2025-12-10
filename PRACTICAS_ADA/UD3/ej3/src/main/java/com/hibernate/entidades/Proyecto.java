@@ -1,7 +1,7 @@
 package com.hibernate.entidades;
 
 import jakarta.persistence.*;
-import java.time.LocalDate; // Usamos LocalDate para fechas sin hora
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,14 +11,15 @@ public class Proyecto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @Column(name = "ID_PROYECTO")
+    private int id; 
 
+    @Column(name = "NOMBRE_PROYECTO", length = 50, nullable = false, unique = true)
     private String nombre;
 
-    @Column(name = "fecha_inicio")
-    private LocalDate fechaInicio;
+    @Column(name = "FECHA_INICIO", nullable = false)
+    private LocalDate fechaInicio; 
 
-    // Si borramos el proyecto, borramos sus investigadores asociados con (CascadeType.ALL)
     @OneToMany(mappedBy = "proyecto", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Investigador> investigadores = new ArrayList<>();
 
@@ -30,7 +31,6 @@ public class Proyecto {
         this.fechaInicio = fechaInicio;
     }
 
-    // Método auxiliar para mantener la coherencia de la relación
     public void addInvestigador(Investigador investigador) {
         investigadores.add(investigador);
         investigador.setProyecto(this);

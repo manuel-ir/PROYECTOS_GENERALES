@@ -11,20 +11,15 @@ public class Proyecto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id; // Hibernate genera este ID automáticamente (autoincrement)
+    @Column(name = "ID_PROYECTO")
+    private int id; 
 
+    @Column(name = "NOMBRE_PROYECTO", length = 50, nullable = false, unique = true)
     private String nombre;
 
-    @Column(name = "fecha_inicio")
-    private LocalDate fechaInicio; // Usa LocalDate para fechas sin hora (Año-Mes-Día)
+    @Column(name = "FECHA_INICIO", nullable = false)
+    private LocalDate fechaInicio; 
 
-    // Configura la relación Uno a Muchos con Investigador
-    // mappedBy: Indica que la clave foránea está en la clase 'Investigador' (campo
-    // 'proyecto')
-    // cascade = ALL: Si guardas/borras/actualizas el proyecto, haz lo mismo con sus
-    // investigadores
-    // orphanRemoval = true: Si quitas un investigador de esta lista, bórralo de la
-    // BD
     @OneToMany(mappedBy = "proyecto", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Investigador> investigadores = new ArrayList<>();
 
@@ -36,9 +31,6 @@ public class Proyecto {
         this.fechaInicio = fechaInicio;
     }
 
-    // Añade un investigador a la lista y asigna este proyecto al investigador
-    // Es vital para mantener la coherencia en ambos lados de la relación
-    // bidireccional
     public void addInvestigador(Investigador investigador) {
         investigadores.add(investigador);
         investigador.setProyecto(this);
