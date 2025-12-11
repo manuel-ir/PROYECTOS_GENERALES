@@ -26,8 +26,8 @@ print("Tu índice de masa corporal es: " + str(imc))
 a= int(input("introduce un entero: ")) 
 b= int(input("introduce otro entero: "))
 
-cociente = a // b
-resto = a % b
+cociente = a // b # Devuelve la parte entera del resultado redondeando hacia abajo. La / sola devuelve parte decimal
+resto = a % b # Devuelve el resto de la división
 
 print("El resto de la división es: " + str(resto) + " y el cociente es: " + str(cociente))
 
