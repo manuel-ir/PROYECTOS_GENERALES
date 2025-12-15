@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Mi Pizzería</title>
+  <style>
+    .ok {
+      color: green;
+    }
+
+    .error {
+      color: red;
+    }
+
+    .panel {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-top: 10px;
+    }
+
+    .oscuro {
+      background-color: #111;
+      color: #f5f5f5;
+    }
+  </style>
+</head>
+
+<body id="pagina">
+  <h2>Mi Pizzería</h2>
+
+  <!-- Botón para alternar modo claro/oscuro -->
+  <button id="modoBtn">Modo oscuro</button>
+
+  <!-- Formulario principal -->
+  <form id="form">
+    <p><label>Nombre: <input type="text" id="nombre"></label></p>
+    <p><label>Teléfono: <input type="text" id="telefono" placeholder="9 dígitos"></label></p>
+    <p><label>Email: <input type="text" id="email" placeholder="ejemplo@correo.com"></label></p>
+
+    <p><strong>Tamaño:</strong>
+      <select id="tamano">
+        <option value="">-- selecciona --</option>
+        <option value="0">Pequeña 8€</option>
+        <option value="1">Mediana 12€</option>
+        <option value="2">Grande 20€</option>
+      </select>
+    </p>
+
+    <p><strong>Ingredientes extra:</strong><br>
+      <label><input type="checkbox" class="extra" value="0"> Queso extra +1€</label>
+      <label><input type="checkbox" class="extra" value="1"> Champiñones +1,50€</label>
+      <label><input type="checkbox" class="extra" value="2"> Pepperoni +2€</label>
+    </p>
+
+    <!-- Botones principales -->
+    <p>
+      <button type="button" id="calcularBtn">Calcular total</button>
+      <button type="submit" id="enviarBtn" disabled>Enviar pedido</button>
+    </p>
+  </form>
+
+  <!-- Zonas de salida -->
+  <div id="mensajes" class="panel"></div>
+  <div id="resumen" class="panel"></div>
+
+  <script>
+  
+    const precios = {
+      tamanos: [8, 12, 20], 
+      ingredientes: [1, 1.5, 2] 
+    };
+
+    let modoOscuro = false;
+    let pedidoValido = false;
+
+    const elementos = {
+      pagina: document.getElementById("pagina"),
+      modoBtn: document.getElementById("modoBtn"),
+      form: document.getElementById("form"),
+      nombre: document.getElementById("nombre"),
+      telefono: document.getElementById("telefono"),
+      email: document.getElementById("email"),
+      tamano: document.getElementById("tamano"),
+      extras: document.querySelectorAll(".extra"),
+      calcularBtn: document.getElementById("calcularBtn"),
+      enviarBtn: document.getElementById("enviarBtn"),
+      mensajes: document.getElementById("mensajes"),
+      resumen: document.getElementById("resumen")
+    };
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+      elementos.modoBtn.addEventListener("click", alternarModo);
+      elementos.calcularBtn.addEventListener("click", calcularTotal);
+      elementos.form.addEventListener("submit", procesarPedido);
+      elementos.form.addEventListener("input", validarFormulario);
+    });
+
+    function alternarModo() {
+      modoOscuro = !modoOscuro;
+
+      if (modoOscuro) {
+        elementos.pagina.classList.add("oscuro");
+        elementos.modoBtn.textContent = "Modo claro";
+      } else {
+        elementos.pagina.classList.remove("oscuro");
+        elementos.modoBtn.textContent = "Modo oscuro";
+      }
+    }
+    function validarNombre() {
+      const nombre = elementos.nombre.value.trim();
+      const mensaje = document.getElementById("mensaje-nombre") || crearMensaje("nombre");
+
+      if (nombre === "") {
+        mostrarError(mensaje, "El nombre es obligatorio");
+        return false;
+      } else if (nombre.length < 2) {
+        mostrarError(mensaje, "El nombre debe tener al menos 2 caracteres");
+        return false;
+      } else {
+        mostrarOk(mensaje, "Nombre válido");
+        return true;
+      }
+    }
+
+    function validarTelefono() {
+      const telefono = elementos.telefono.value.trim();
+      const mensaje = document.getElementById("mensaje-telefono") || crearMensaje("telefono");
+      
+      if (telefono === "") {
+        mostrarError(mensaje, "El teléfono es obligatorio");
+        return false;
+      } else {
+        mostrarOk(mensaje, "Teléfono válido");
+        return true;
+      }
+    }
+
+    function validarEmail() {
+      const email = elementos.email.value.trim();
+      const mensaje = document.getElementById("mensaje-email") || crearMensaje("email");
+
+      if (email === "") {
+        mostrarError(mensaje, "El email es obligatorio");
+        return false;
+      } else {
+        mostrarOk(mensaje, "Email válido");
+        return true;
+      }
+    }
+
+    function validarTamano() {
+      const tamano = elementos.tamano.value;
+      const mensaje = document.getElementById("mensaje-tamano") || crearMensaje("tamano");
+
+      if (tamano === "") {
+        mostrarError(mensaje, "Debes seleccionar un tamaño");
+        return false;
+      } else {
+        mostrarOk(mensaje, "Tamaño seleccionado");
+        return true;
+      }
+    }
+
+    function validarFormulario() {
+      const nombreValido = validarNombre();
+      const telefonoValido = validarTelefono();
+      const emailValido = validarEmail();
+      const tamanoValido = validarTamano();
+
+      pedidoValido = nombreValido && telefonoValido && emailValido && tamanoValido;
+      elementos.enviarBtn.disabled = !pedidoValido;
+
+      return pedidoValido;
+    }
+
+    function crearMensaje(campo) {
+      const mensaje = document.createElement("span");
+      mensaje.id = mensaje-${campo};
+      mensaje.style.marginLeft = "10px";;
+
+      const campoElemento = elementos[campo];
+      campoElemento.parentNode.appendChild(mensaje);
+
+      return mensaje;
+    }
+
+    function mostrarError(elemento, mensaje) {
+      elemento.textContent = mensaje;
+      elemento.className = "error";
+    }
+
+    function mostrarOk(elemento, mensaje) {
+      elemento.textContent = mensaje;
+      elemento.className = "ok";
+    }
+
+    function calcularTotal() {
+      if (!validarFormulario()) {
+        elementos.resumen.innerHTML = '<p class="error">Por favor, completa todos los campos obligatorios antes de calcular el total.</p>';
+        return;
+      }
+
+      let total = 0;
+      const tamanoIndex = parseInt(elementos.tamano.value);
+      total += precios.tamanos[tamanoIndex];
+
+      let ingredientesSeleccionados = [];
+      elementos.extras.forEach(extra => {
+        if (extra.checked) {
+          const ingredienteIndex = parseInt(extra.value);
+          total += precios.ingredientes[ingredienteIndex];
+          ingredientesSeleccionados.push(extra.parentNode.textContent.trim());
+        }
+      });
+
+      const nombresTamanos = ["Pequeña", "Mediana", "Grande"];
+      elementos.resumen.innerHTML = `
+    <h3>Resumen de tu pedido</h3>
+    <p><strong>Nombre:</strong> ${elementos.nombre.value}</p>
+    <p><strong>Teléfono:</strong> ${elementos.telefono.value}</p>
+    <p><strong>Email:</strong> ${elementos.email.value}</p>
+    <p><strong>Tamaño:</strong> ${nombresTamanos[tamanoIndex]} - $${precios.tamanos[tamanoIndex]}</p>
+    ${ingredientesSeleccionados.length > 0 ?
+          <p><strong>Ingredientes extra:</strong> ${ingredientesSeleccionados.join(", ")}</p> :
+          "<p><strong>Ingredientes extra:</strong> Ninguno</p>"
+        }
+    <p><strong>Total:</strong> $${total.toFixed(2)}</p>
+  `;
+    }
+
+    function procesarPedido(evento) {
+      evento.preventDefault();
+
+      if (!pedidoValido) {
+        elementos.mensajes.innerHTML = '<p class="error">Por favor, completa todos los campos correctamente antes de enviar el pedido.</p>';
+        return;
+      }
+      elementos.mensajes.innerHTML = '<p class="ok">¡Pedido enviado correctamente! Te contactaremos pronto.</p>';
+
+      elementos.form.reset();
+      elementos.resumen.innerHTML = "";
+      elementos.enviarBtn.disabled = true;
+
+      document.querySelectorAll('[id^="mensaje-"]').forEach(mensaje => {
+        mensaje.textContent = "";
+      });
+
+      pedidoValido = false;
+    }
+  </script>
+</body>
+
+</html>

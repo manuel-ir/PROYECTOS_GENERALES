@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Mi Pizzería</title>
+    <style>
+        .ok {
+            color: green;
+        }
+        
+        .error {
+            color: red;
+        }
+        
+        .panel {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 10px;
+        }
+        
+        .oscuro {
+            background-color: #111;
+            color: #f5f5f5;
+        }
+    </style>
+</head>
+
+<body id="pagina">
+    <h2>Mi Pizzería</h2>
+
+    <!-- Botón para alternar modo claro/oscuro -->
+    <button id="modoBtn">Modo oscuro</button>
+
+    <!-- Formulario principal -->
+    <form id="form">
+        <p><label>Nombre: <input type="text" id="nombre"></label></p>
+        <p><label>Teléfono: <input type="text" id="telefono" placeholder="9 dígitos"></label></p>
+        <p><label>Email: <input type="text" id="email" placeholder="ejemplo@correo.com"></label></p>
+
+        <p><strong>Tamaño:</strong>
+            <select id="tamano">
+        <option value="">-- selecciona --</option>
+        <option value="0">Pequeña</option>
+        <option value="1">Mediana</option>
+        <option value="2">Grande</option>
+      </select>
+        </p>
+
+        <p><strong>Ingredientes extra:</strong><br>
+            <label><input type="checkbox" class="extra" value="0"> Queso extra</label>
+            <label><input type="checkbox" class="extra" value="1"> Champiñones</label>
+            <label><input type="checkbox" class="extra" value="2"> Pepperoni</label>
+        </p>
+
+        <!-- Botones principales -->
+        <p>
+            <button type="button" id="calcularBtn">Calcular total</button>
+            <button type="submit" id="enviarBtn" disabled>Enviar pedido</button>
+        </p>
+    </form>
+
+    <!-- Zonas de salida -->
+    <div id="mensajes" class="panel"></div>
+    <div id="resumen" class="panel"></div>
+
+    <script>
+        // 1. Modo claro / oscuro
+        modoBtn.onclick = function() {
+            document.getElementById('pagina').classList.toggle('oscuro');
+        };
+
+        function calculoPrecio() {
+            // 2. Validación básica del formulario
+            let mensajes = [];
+            let nombre = document.getElementById('nombre').value.trim();
+            let telefono = document.getElementById('telefono').value.trim();
+            let email = document.getElementById('email').value.trim();
+            let tamano = document.getElementById('tamano').value;
+
+            if (nombre === '' && telefono === '' && email === '' && (tamano === '' || tamano === '-- selecciona --')) {
+                mensajes.push('Debes completar todos los campos.')
+            } else {
+                if (nombre === '') {
+                    mensajes.push('El nombre no puede estar vacío.');
+                }
+                if (telefono.length !== 9 || isNaN(telefono)) {
+                    mensajes.push('El teléfono no es válido.');
+                }
+                if (!email.includes('@')) {
+                    mensajes.push('El email no es válido.');
+                }
+                if (tamano === '') {
+                    mensajes.push('Debes seleccionar un tamaño de pizza.');
+                }
+            }
+
+            document.getElementById('mensajes').textContent = mensajes.join('\n');
+
+            // 3. Cálculo del precio total con arrays
+            if (mensajes.length !== 0) {
+                document.getElementById('resumen').innerHTML = '';
+                document.getElementById('mensajes').style.color = 'red';
+                enviarBtn.disabled = true;
+                return;
+            }
+            document.getElementById('mensajes').textContent = 'Todos los datos son correctos.';
+            document.getElementById('mensajes').style.color = 'green';
+            let preciosTamano = [8, 12, 20];
+            let preciosExtras = [1, 1.5, 2];
+            let extrasSeleccionados = document.querySelectorAll('.extra:checked');
+            let total = preciosTamano[tamano];
+
+            extrasSeleccionados.forEach(function(extra) {
+                total += preciosExtras[extra.value];
+            });
+
+            document.getElementById('resumen').textContent = 'Total a pagar: ' + total.toFixed(2) + ' €';
+            enviarBtn.disabled = false;
+        };
+
+        // 4. Función principal y actualización del DOM (no logra escribir el resumen entero, solo cambia el color de fondo)
+        form.onsubmit = function(event) {
+            event.preventDefault();
+            document.getElementById('resumen').style.backgroundColor = 'blue';
+            calculoPrecio();
+
+            let mensajes = [];
+            let tamano = document.getElementById('tamano').value;
+            let extrasSeleccionados = document.querySelectorAll('.extra:checked');
+            let precioTotal = document.getElementById('resumen').textContent();
+
+            let extras = [];
+            extrasSeleccionados.forEach(function(extra) {
+                extras.push(extra.textContent());
+            });
+
+            mensajes.push('Tamaño elegido: ' + tamano);
+            mensajes.push('Extras seleccionados: ' + extras.join(', '));
+            mensajes.push(precioTotal);
+
+            document.getElementById('resumen').textContent = mensajes.join('\n');
+        }
+
+        calcularBtn.onclick = calculoPrecio;
+    </script>
+</body>
+
+</html>
