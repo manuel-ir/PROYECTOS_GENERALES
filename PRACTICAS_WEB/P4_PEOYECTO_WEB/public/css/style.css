@@ -163,7 +163,7 @@ h1, h2, h3 {
 }
 
 
-/* --- ESTILOS DEL MODO OSCURO --- */
+/*  ESTILOS DEL MODO OSCURO */
 body.dark-mode {
     background-color: #222;
     color: #e0e0e0;

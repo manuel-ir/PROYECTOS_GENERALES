@@ -1,0 +1,24 @@
+{
+  "name": "PROYECTO WEB - CONCIERTOS",
+  "version": "1.0.0",
+  "description": "Servidor WEB para gestionar la reserva de entradas para entos de conciertos",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IESPSUR/ud1-pr2-proyecto-base-sistema-de-reservas-manuel-ir.git"
+  },
+  "keywords": [],
+  "author": "Manuel 2do DAM",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/IESPSUR/ud1-pr2-proyecto-base-sistema-de-reservas-manuel-ir/issues"
+  },
+  "homepage": "https://github.com/IESPSUR/ud1-pr2-proyecto-base-sistema-de-reservas-manuel-ir#readme",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}

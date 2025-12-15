@@ -33,7 +33,6 @@ document.addEventListener("DOMContentLoaded", function() {
     const pageId = document.body.id; 
     const usuario = localStorage.getItem("usuario"); 
 
-    
     if (pageId !== "pagina-login" && pageId !== "pagina-index" && !usuario) {
         alert("Debes iniciar sesión para acceder a esta página.");
         window.location.href = "login.html";
@@ -44,7 +43,12 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // LÓGICA login
     if (pageId === "pagina-login") {
-        const formLogin = document.getElementById("form-login");
+        
+        // MODIFICACIÓN PARA UD2_AC6
+        // He comentado toda la lógica de validación de cliente para permitir
+        // que el formulario haga el POST al servidor.
+        
+        /* const formLogin = document.getElementById("form-login");
         const emailInput = document.getElementById("email");
         const passwordInput = document.getElementById("password");
         const mensajeError = document.getElementById("mensaje-error");
@@ -71,6 +75,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 window.location.href = "reserva.html"; 
             }
         });
+        */
+       console.log("Lógica de cliente desactivada en Login para permitir POST al servidor.");
     }
 
     // 2. LÓGICA index

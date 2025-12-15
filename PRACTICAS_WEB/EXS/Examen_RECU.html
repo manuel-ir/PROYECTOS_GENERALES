@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Alquiler de material</title>
+  <style>
+    .ok {
+      color: blue;
+    }
+
+    .error {
+      color: red;
+    }
+
+    .panel {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-top: 10px;
+    }
+
+    .oscuro {
+      background-color: #111;
+      color: #f5f5f5;
+    }
+
+
+    .resumen-final {
+      background-color: #e0f7fa;
+      color: #000;
+    }
+  </style>
+</head>
+
+<body id="pagina">
+  <h2>Alquiler de material</h2>
+
+  <button id="temaBtn">Modo oscuro</button>
+
+  <form id="formAlquiler">
+    <p><label>Nombre del cliente: <input type="text" id="nomCliente"></label></p>
+
+    <p><label>Código de cliente: <input type="text" id="codigo" placeholder="C1234"></label></p>
+
+    <p><label>Código postal: <input type="text" id="cp" placeholder="5 dígitos"></label></p>
+
+    <p><strong>Tipo de material:</strong>
+      <select id="material">
+        <option value="">-- selecciona --</option>
+        <option value="0">Bicicleta</option>
+        <option value="1">Patinete</option>
+        <option value="2">Kayak</option>
+      </select>
+    </p>
+
+    <p><strong>Extras:</strong><br>
+      <label><input type="checkbox" class="extra" value="0"> Casco</label>
+      <label><input type="checkbox" class="extra" value="1"> Seguro</label>
+      <label><input type="checkbox" class="extra" value="2"> Luces</label>
+    </p>
+
+    <p>
+      <button type="button" id="calcularAlquilerBtn">Calcular alquiler</button>
+
+      <button type="submit" id="confirmarBtn" disabled>Confirmar alquiler</button>
+    </p>
+  </form>
+
+  <div id="avisos" class="panel"></div>
+  <div id="detalleAlquiler" class="panel"></div>
+
+  <script>
+    /* DEFINICIÓN DE ARRAYS*/
+    // Usa el arrays para los precios.
+    const precios = {
+      // Bicicleta (5€), 1: Patinete (4€), 2: Kayak (8€)
+      materiales: [5, 4, 8],
+      // Casco (1€), 1: Seguro (2€), 2: Luces (0.5€)
+      extras: [1, 2, 0.5]
+    };
+    
+    // Variable global para guardar el total calculado
+    let totalAlquiler = 0;
+
+
+    /* SELECCIÓN DE ELEMENTOS DEL DOM
+       Guardamos las referencias en un objeto para tener el código ordenado. */
+
+    const el = {
+      pagina: document.getElementById("pagina"), // Body
+      temaBtn: document.getElementById("temaBtn"),
+      form: document.getElementById("formAlquiler"),
+
+      // Inputs del formulario
+      nomCliente: document.getElementById("nomCliente"),
+      codigo: document.getElementById("codigo"),
+      cp: document.getElementById("cp"),
+      material: document.getElementById("material"),
+
+      // querySelectorAll devuelve una lista con todos los checkbox que tengan class="extra"
+      extras: document.querySelectorAll(".extra"),
+
+      // Botones
+      calcularBtn: document.getElementById("calcularAlquilerBtn"),
+      confirmarBtn: document.getElementById("confirmarBtn"),
+
+      // Divs de salida
+      avisos: document.getElementById("avisos"),
+      detalle: document.getElementById("detalleAlquiler")
+    };
+
+
+    // ASIGNACIÓN DE LISTENERS
+
+    // Al cargar la página, asignamos las funciones a los eventos
+    document.addEventListener("DOMContentLoaded", () => {
+
+      // Click en botón de tema
+      el.temaBtn.addEventListener("click", alternarModo);
+
+      // Click en botón calcular
+      el.calcularBtn.addEventListener("click", calcularPrecio);
+
+      // Submit del formulario (Confirmar alquiler)
+      el.form.addEventListener("submit", confirmarAlquiler);
+    });
+
+
+    // FUNCIONES DE LÓGICA
+
+    /* Alternar Modo Claro/Oscuro */
+    function alternarModo() {
+     
+     el.pagina.classList.toggle("oscuro");
+     
+      if (el.pagina.classList.contains("oscuro")) {
+        el.temaBtn.textContent = "Modo claro";
+      } else {
+        el.temaBtn.textContent = "Modo oscuro";
+      }
+      
+    }
+
+    /* Validar Formulario  */
+    function validarFormulario() {
+      let errores = [];
+
+      // Validar Nombre: No puede estar vacío. Usamos trim() para quitar espacios 
+      if (el.nomCliente.value.trim() === "") {
+        errores.push("El nombre del cliente es obligatorio.");
+      }
+
+      // Validar Código: Debe contener la letra "C" 
+      // Convertimos a mayúsculas para asegurar que detecta "c" o "C"
+      if (!el.codigo.value.toUpperCase().includes("C")) {
+        errores.push("El código de cliente debe contener la letra 'C'.");
+      }
+
+      // Validación del CP: Exactamente 5 dígitos numéricos 
+      const cpValor = el.cp.value.trim();
+      // isNaN devuelve true si NO es un número. length comprueba longitud.
+      if (cpValor.length !== 5 || isNaN(cpValor)) {
+        errores.push("El código postal debe tener exactamente 5 dígitos numéricos.");
+      }
+
+      // Validación del material: Debe haber seleccionado alguna opción
+      if (el.material.value === "") {
+        errores.push("Debes seleccionar un tipo de material.");
+      }
+
+      return errores; // Devolvemos el array con los errores encontrados
+    }
+
+    /* Calcular Precio */
+    function calcularPrecio() {
+      // Llamamos a validar. Si hay errores, paramos y mostramos mensajes
+      const listaErrores = validarFormulario();
+
+      if (listaErrores.length > 0) {
+        // Mostramos errores en rojo usando la clase .error definida en CSS
+        // join("<br>") une los mensajes saltando de línea
+        el.avisos.innerHTML = listaErrores.join("<br>");
+        el.avisos.className = "panel error";
+
+        // Deshabilitamos el botón de confirmar porque los datos están mal
+        el.confirmarBtn.disabled = true;
+        el.detalle.innerHTML = ""; 
+        return; 
+      }
+
+      // Si no hay errores, procedemos al cálculo
+      // Mensaje de éxito en azul
+      el.avisos.textContent = "Datos válidos. Puedes confirmar el alquiler.";
+      el.avisos.className = "panel ok";
+
+      // Inicio del cálculo
+      let subtotal = 0;
+
+      // Precio del material: Usamos el value del select como índice del array 
+      const indiceMaterial = parseInt(el.material.value);
+      subtotal += precios.materiales[indiceMaterial];
+
+      // Precio de los extras: Recorremos los checkboxes seleccionados
+      el.extras.forEach(checkbox => {
+        if (checkbox.checked) {
+          const indiceExtra = parseInt(checkbox.value);
+          subtotal += precios.extras[indiceExtra];
+        }
+      });
+
+      // Guardamos el total en la variable global
+      totalAlquiler = subtotal;
+
+      // Mostramos el resultado previo en el panel de detalle
+      el.detalle.innerHTML = `Precio estimado: <strong>${totalAlquiler.toFixed(2)} €</strong>`;
+
+      // Habilitamos el botón de confirmar alquiler 
+      el.confirmarBtn.disabled = false;
+    }
+
+    /* Confirmar Alquiler */
+    function confirmarAlquiler(evento) {
+      // Evitamos que el formulario recargue la página 
+      evento.preventDefault();
+
+      // Obtenemos el texto del material seleccionado 
+      const nombreMaterial = el.material.options[el.material.selectedIndex].text;
+
+      // Obtenemos los nombres de los extras seleccionados para el resumen
+      let nombresExtras = [];
+      el.extras.forEach(checkbox => {
+        if (checkbox.checked) {
+          // parentNode es el <label>, textContent coge el texto "Casco", "Seguro", etc
+          nombresExtras.push(checkbox.parentNode.textContent.trim());
+        }
+      });
+
+      // Si el array de extras está vacío, mostramos "Ninguno"
+      const textoExtras = nombresExtras.length > 0 ? nombresExtras.join(", ") : "Ninguno";
+
+      // HTML del resumen final
+      el.detalle.innerHTML = `
+        <h3>Resumen Final del Alquiler</h3>
+        <p><strong>Cliente:</strong> ${el.nomCliente.value}</p>
+        <p><strong>Código:</strong> ${el.codigo.value}</p>
+        <p><strong>Material:</strong> ${nombreMaterial}</p>
+        <p><strong>Extras incluidos:</strong> ${textoExtras}</p>
+        <hr>
+        <h2>Total a pagar: ${totalAlquiler.toFixed(2)} €</h2>
+      `;
+
+      // Cambiar color de fondo para destacar 
+      el.detalle.classList.add("resumen-final");
+
+      // Deshabilitamos el botón para que no envíe dos veces
+      el.confirmarBtn.disabled = true;
+      el.avisos.textContent = ""; 
+    }
+
+  </script>
+</body>
+
+</html>
