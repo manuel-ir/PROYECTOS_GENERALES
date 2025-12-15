@@ -5,20 +5,18 @@
   <meta charset="UTF-8">
   <title>Mi Pizzería</title>
   <style>
-    .ok {
-      color: green;
-    }
+    /* Estilos básicos para validación visual */
+    .ok { color: green; }
+    .error { color: red; }
 
-    .error {
-      color: red;
-    }
-
+    /* Estilo para los contenedores de mensajes y resumen */
     .panel {
       border: 1px solid #ccc;
       padding: 10px;
       margin-top: 10px;
     }
 
+    /* Clase que se activará/desactivará con JS para el modo oscuro */
     .oscuro {
       background-color: #111;
       color: #f5f5f5;
@@ -29,10 +27,8 @@
 <body id="pagina">
   <h2>Mi Pizzería</h2>
 
-  <!-- Botón para alternar modo claro/oscuro -->
   <button id="modoBtn">Modo oscuro</button>
 
-  <!-- Formulario principal -->
   <form id="form">
     <p><label>Nombre: <input type="text" id="nombre"></label></p>
     <p><label>Teléfono: <input type="text" id="telefono" placeholder="9 dígitos"></label></p>
@@ -53,35 +49,43 @@
       <label><input type="checkbox" class="extra" value="2"> Pepperoni +2€</label>
     </p>
 
-    <!-- Botones principales -->
     <p>
       <button type="button" id="calcularBtn">Calcular total</button>
       <button type="submit" id="enviarBtn" disabled>Enviar pedido</button>
     </p>
   </form>
 
-  <!-- Zonas de salida -->
   <div id="mensajes" class="panel"></div>
   <div id="resumen" class="panel"></div>
 
   <script>
-  
+    /* -----------------------------------------------------
+       1. DATOS (ARRAYS)
+       Tal como pide el ejercicio, usamos arrays para los precios.
+       Los índices coinciden con los 'value' del HTML.
+       ----------------------------------------------------- */
     const precios = {
-      tamanos: [8, 12, 20], 
-      ingredientes: [1, 1.5, 2] 
+      tamanos: [8, 12, 20],      // 0: Pequeña, 1: Mediana, 2: Grande
+      ingredientes: [1, 1.5, 2]  // 0: Queso, 1: Champi, 2: Pepperoni
     };
 
+    /* Variables de estado para controlar la lógica */
     let modoOscuro = false;
-    let pedidoValido = false;
+    let pedidoValido = false; // Controla si se puede pulsar "Enviar"
 
+    /* 2. CACHÉ DE ELEMENTOS DOM
+       Guardamos todos los elementos en un objeto constante al principio.
+       Esto es una BUENA PRÁCTICA (mejor que hacer document.getElementById cada vez).
+    */
     const elementos = {
-      pagina: document.getElementById("pagina"),
+      pagina: document.getElementById("pagina"), // El body
       modoBtn: document.getElementById("modoBtn"),
       form: document.getElementById("form"),
       nombre: document.getElementById("nombre"),
       telefono: document.getElementById("telefono"),
       email: document.getElementById("email"),
       tamano: document.getElementById("tamano"),
+      // querySelectorAll devuelve una lista de nodos (NodeList) con todos los checkbox
       extras: document.querySelectorAll(".extra"),
       calcularBtn: document.getElementById("calcularBtn"),
       enviarBtn: document.getElementById("enviarBtn"),
@@ -89,27 +93,48 @@
       resumen: document.getElementById("resumen")
     };
 
+    /* -----------------------------------------------------
+       3. EVENTOS (addEventListener)
+       Esperamos a que el DOM cargue (DOMContentLoaded) antes de asignar eventos.
+       ----------------------------------------------------- */
     document.addEventListener("DOMContentLoaded", function () {
-
+      // Evento Click para el modo oscuro
       elementos.modoBtn.addEventListener("click", alternarModo);
+      
+      // Evento Click para calcular (botón tipo button)
       elementos.calcularBtn.addEventListener("click", calcularTotal);
+      
+      // Evento Submit para el envío final (prevenir recarga)
       elementos.form.addEventListener("submit", procesarPedido);
+      
+      // Evento Input en el formulario: se dispara cada vez que escribes o cambias algo.
+      // Sirve para validar en tiempo real.
       elementos.form.addEventListener("input", validarFormulario);
     });
 
+    /* -----------------------------------------------------
+       4. FUNCIONES DE LÓGICA Y DOM
+       ----------------------------------------------------- */
+
+    // Función para cambiar clases CSS (classList)
     function alternarModo() {
-      modoOscuro = !modoOscuro;
+      modoOscuro = !modoOscuro; // Invierte el valor (true -> false, false -> true)
 
       if (modoOscuro) {
-        elementos.pagina.classList.add("oscuro");
-        elementos.modoBtn.textContent = "Modo claro";
+        elementos.pagina.classList.add("oscuro"); // Añade clase CSS
+        elementos.modoBtn.textContent = "Modo claro"; // Cambia texto botón
       } else {
-        elementos.pagina.classList.remove("oscuro");
+        elementos.pagina.classList.remove("oscuro"); // Quita clase CSS
         elementos.modoBtn.textContent = "Modo oscuro";
       }
     }
+
+    /* --- VALIDACIONES INDIVIDUALES --- */
+    
+    // Valida nombre: no vacío y longitud mínima
     function validarNombre() {
-      const nombre = elementos.nombre.value.trim();
+      const nombre = elementos.nombre.value.trim(); // .trim() quita espacios extra
+      // Busca si ya existe un span de error, si no, lo crea dinámicamente
       const mensaje = document.getElementById("mensaje-nombre") || crearMensaje("nombre");
 
       if (nombre === "") {
@@ -124,6 +149,8 @@
       }
     }
 
+    // Valida teléfono: OJO, aquí tu compañero solo valida que no esté vacío.
+    // Para el 10, debería validar longitud 9: if (telefono.length !== 9 || isNaN(telefono))
     function validarTelefono() {
       const telefono = elementos.telefono.value.trim();
       const mensaje = document.getElementById("mensaje-telefono") || crearMensaje("telefono");
@@ -137,6 +164,7 @@
       }
     }
 
+    // Valida email: igual, solo valida que no esté vacío (básico).
     function validarEmail() {
       const email = elementos.email.value.trim();
       const mensaje = document.getElementById("mensaje-email") || crearMensaje("email");
@@ -150,6 +178,7 @@
       }
     }
 
+    // Valida tamaño: se asegura de que no sea la opción por defecto ("")
     function validarTamano() {
       const tamano = elementos.tamano.value;
       const mensaje = document.getElementById("mensaje-tamano") || crearMensaje("tamano");
@@ -163,93 +192,122 @@
       }
     }
 
+    /* --- ORQUESTADOR DE VALIDACIÓN --- */
+    // Esta función llama a todas las anteriores. Si TODAS son true, habilita el botón.
     function validarFormulario() {
       const nombreValido = validarNombre();
       const telefonoValido = validarTelefono();
       const emailValido = validarEmail();
       const tamanoValido = validarTamano();
 
+      // Operador AND (&&): Todas deben ser verdaderas
       pedidoValido = nombreValido && telefonoValido && emailValido && tamanoValido;
+      
+      // Si pedidoValido es true, disabled es false (botón activo)
       elementos.enviarBtn.disabled = !pedidoValido;
 
       return pedidoValido;
     }
 
+    /* --- UTILIDADES DOM (Crear y mostrar mensajes) --- */
+    // Crea un <span> dinámicamente justo al lado del input correspondiente
     function crearMensaje(campo) {
       const mensaje = document.createElement("span");
-      mensaje.id = mensaje-${campo};
-      mensaje.style.marginLeft = "10px";;
+      mensaje.id = `mensaje-${campo}`; // Crea IDs dinámicos: mensaje-nombre, mensaje-email...
+      mensaje.style.marginLeft = "10px";
 
       const campoElemento = elementos[campo];
+      // appendChild inserta el span después del input (en su padre)
       campoElemento.parentNode.appendChild(mensaje);
 
       return mensaje;
     }
 
+    // Funciones auxiliares para cambiar texto y color (clase CSS) del mensaje
     function mostrarError(elemento, mensaje) {
       elemento.textContent = mensaje;
-      elemento.className = "error";
+      elemento.className = "error"; // Aplica color rojo
     }
 
     function mostrarOk(elemento, mensaje) {
       elemento.textContent = mensaje;
-      elemento.className = "ok";
+      elemento.className = "ok"; // Aplica color verde
     }
 
+    /* -----------------------------------------------------
+       5. CÁLCULO DEL TOTAL (Lógica principal con Arrays)
+       ----------------------------------------------------- */
     function calcularTotal() {
+      // 1. Verificar si hay errores antes de calcular
       if (!validarFormulario()) {
         elementos.resumen.innerHTML = '<p class="error">Por favor, completa todos los campos obligatorios antes de calcular el total.</p>';
-        return;
+        return; // Detiene la función aquí
       }
 
       let total = 0;
-      const tamanoIndex = parseInt(elementos.tamano.value);
-      total += precios.tamanos[tamanoIndex];
 
+      // 2. Obtener precio base del array usando el índice (value del select)
+      const tamanoIndex = parseInt(elementos.tamano.value); // "0", "1" o "2" -> 0, 1, 2
+      total += precios.tamanos[tamanoIndex]; // Suma 8, 12 o 20
+
+      // 3. Obtener extras recorriendo los checkbox (forEach)
       let ingredientesSeleccionados = [];
       elementos.extras.forEach(extra => {
-        if (extra.checked) {
-          const ingredienteIndex = parseInt(extra.value);
-          total += precios.ingredientes[ingredienteIndex];
+        if (extra.checked) { // Si la casilla está marcada
+          const ingredienteIndex = parseInt(extra.value); // Toma el valor (0, 1, 2)
+          total += precios.ingredientes[ingredienteIndex]; // Suma precio del array
+          
+          // Guarda el nombre del ingrediente (texto del padre label) para el resumen
           ingredientesSeleccionados.push(extra.parentNode.textContent.trim());
         }
       });
 
+      // 4. Mostrar Resumen usando Template Strings (``) e innerHTML
       const nombresTamanos = ["Pequeña", "Mediana", "Grande"];
+      
+      // Operador ternario para listar ingredientes o poner "Ninguno"
+      // toFixed(2) fuerza mostrar 2 decimales (ej: 10.50)
       elementos.resumen.innerHTML = `
-    <h3>Resumen de tu pedido</h3>
-    <p><strong>Nombre:</strong> ${elementos.nombre.value}</p>
-    <p><strong>Teléfono:</strong> ${elementos.telefono.value}</p>
-    <p><strong>Email:</strong> ${elementos.email.value}</p>
-    <p><strong>Tamaño:</strong> ${nombresTamanos[tamanoIndex]} - $${precios.tamanos[tamanoIndex]}</p>
-    ${ingredientesSeleccionados.length > 0 ?
-          <p><strong>Ingredientes extra:</strong> ${ingredientesSeleccionados.join(", ")}</p> :
-          "<p><strong>Ingredientes extra:</strong> Ninguno</p>"
+        <h3>Resumen de tu pedido</h3>
+        <p><strong>Nombre:</strong> ${elementos.nombre.value}</p>
+        <p><strong>Teléfono:</strong> ${elementos.telefono.value}</p>
+        <p><strong>Email:</strong> ${elementos.email.value}</p>
+        <p><strong>Tamaño:</strong> ${nombresTamanos[tamanoIndex]} - ${precios.tamanos[tamanoIndex]}€</p>
+        ${ingredientesSeleccionados.length > 0 ?
+           `<p><strong>Ingredientes extra:</strong> ${ingredientesSeleccionados.join(", ")}</p>` :
+           "<p><strong>Ingredientes extra:</strong> Ninguno</p>"
         }
-    <p><strong>Total:</strong> $${total.toFixed(2)}</p>
-  `;
+        <p><strong>Total:</strong> ${total.toFixed(2)}€</p>
+      `;
     }
 
+    /* -----------------------------------------------------
+       6. PROCESAR PEDIDO (Submit)
+       ----------------------------------------------------- */
     function procesarPedido(evento) {
+      // PREVENIR el comportamiento por defecto (que la página se recargue)
       evento.preventDefault();
 
       if (!pedidoValido) {
-        elementos.mensajes.innerHTML = '<p class="error">Por favor, completa todos los campos correctamente antes de enviar el pedido.</p>';
+        elementos.mensajes.innerHTML = '<p class="error">Por favor, completa todos los campos correctamente.</p>';
         return;
       }
+      
+      // Mostrar mensaje de éxito final
       elementos.mensajes.innerHTML = '<p class="ok">¡Pedido enviado correctamente! Te contactaremos pronto.</p>';
 
-      elementos.form.reset();
-      elementos.resumen.innerHTML = "";
-      elementos.enviarBtn.disabled = true;
+      // LIMPIEZA DEL FORMULARIO
+      elementos.form.reset(); // Borra los inputs
+      elementos.resumen.innerHTML = ""; // Borra el resumen visual
+      elementos.enviarBtn.disabled = true; // Desactiva el botón de nuevo
 
+      // Borra los mensajitos de validación (span) que creamos
       document.querySelectorAll('[id^="mensaje-"]').forEach(mensaje => {
         mensaje.textContent = "";
       });
 
-      pedidoValido = false;
+      pedidoValido = false; // Reinicia el estado
     }
   </script>
 </body>
-
 </html>
