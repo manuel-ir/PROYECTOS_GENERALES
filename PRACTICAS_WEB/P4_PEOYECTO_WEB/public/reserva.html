@@ -17,18 +17,17 @@
             </div>
         </header>
 
-        <!-- MENSAJE DE BIENVENIDA -->
         <h2 id="mensaje-bienvenida" style="margin-top: 0;"></h2>
 
-        <form id="form-reserva">
+        <form id="form-reserva" method="POST" action="/reserva">
             <div class="form-group">
                 <label for="fecha">Fecha y Hora del Evento:</label>
-                <input type="datetime-local" id="fecha" required>
+                <input type="datetime-local" id="fecha" name="fecha" required>
             </div>
             
             <div class="form-group">
                 <label for="evento">Selecciona el Evento:</label>
-                <select id="evento" required>
+                <select id="evento" name="evento" required>
                     <option value="">-- Elige un evento --</option>
                     <option value="50">Concierto de Rock - 50€</option>
                     <option value="75">Festival de Jazz - 75€</option>
@@ -38,28 +37,28 @@
             
             <div class="form-group">
                 <label for="entradas">Número de Entradas:</label>
-                <input type="number" id="entradas" min="1" value="1" required>
+                <input type="number" id="entradas" name="entradas" min="1" value="1" required>
             </div>
             
             <div class="form-group">
                 <label>Extras (opcional):</label>
                 <div>
-                    <input type="checkbox" id="extra-asiento" class="extra" value="15">
+                    <input type="checkbox" id="extra-asiento" name="extras" class="extra" value="15">
                     <label for="extra-asiento">Asiento preferente (+15€)</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="extra-backstage" class="extra" value="50">
+                    <input type="checkbox" id="extra-backstage" name="extras" class="extra" value="50">
                     <label for="extra-backstage">Acceso backstage (+50€)</label>
                 </div>
                 <div>
-                    <input type="checkbox" id="extra-bebida" class="extra" value="8">
+                    <input type="checkbox" id="extra-bebida" name="extras" class="extra" value="8">
                     <label for="extra-bebida">Bebida incluida (+8€)</label>
                 </div>
             </div>
             
             <div class="form-group">
                 <label for="comentarios">Comentarios (máx 200 caracteres):</label>
-                <textarea id="comentarios" maxlength="200"></textarea>
+                <textarea id="comentarios" name="comentarios" maxlength="200"></textarea>
                 <span id="contador-caracteres">0/200</span>
             </div>
             
@@ -69,8 +68,10 @@
             
             <button type="submit" class="btn btn-primary">Confirmar Reserva</button>
         </form>
-    </div>
+         </div>
 
     <script src="./js/script.js"></script>
 </body>
 </html>
+
+

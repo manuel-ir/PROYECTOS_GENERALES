@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
-    // LÓGICA VERIFICACIÓN DE SESIÓN
+    /*// LÓGICA VERIFICACIÓN DE SESIÓN
     const pageId = document.body.id; 
     const usuario = localStorage.getItem("usuario"); 
 
@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function() {
         alert("Debes iniciar sesión para acceder a esta página.");
         window.location.href = "login.html";
         return; 
-    }
+    } */
 
     // LÓGICA POR PÁGINA 
 
@@ -137,6 +137,10 @@ document.addEventListener("DOMContentLoaded", function() {
             checkbox.addEventListener("change", calcularTotal);
         });
 
+        // MODIFICACIONES UD2_AC7
+        // Se comenta la lógica de envío del cliente para permitir el POST al servidor
+        
+        
         // Evento para enviar el formulario
         formReserva.addEventListener("submit", function(event) {
             event.preventDefault(); 
@@ -172,6 +176,10 @@ document.addEventListener("DOMContentLoaded", function() {
             localStorage.setItem("reserva", JSON.stringify(datosReserva));
             window.location.href = "resumen.html";
         });
+        
+       
+       console.log("Lógica de cliente desactivada en Reserva para permitir POST al servidor.");
+       // FIN MODIFICACIONES UD2_AC7
 
         calcularTotal();
     }
