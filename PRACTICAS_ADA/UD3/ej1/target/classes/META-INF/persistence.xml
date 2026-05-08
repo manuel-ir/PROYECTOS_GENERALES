@@ -4,18 +4,17 @@
              xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
              version="3.0">
 
-    <persistence-unit name="unidadBiblioteca">
+    <persistence-unit name="Biblioteca1">
         
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         
-        <class>com.hibernate_ej1.entidades.Libro</class>
-        <class>com.hibernate_ej1.entidades.Usuario</class>
-        <class>com.hibernate_ej1.entidades.Prestamo</class>
-        <class>com.hibernate_ej1.entidades.NombreCompleto</class>
-        <class>com.hibernate_ej1.entidades.PrestamoId</class>
-
+        <class>com.hibernate.entidades.Libro</class>
+        <class>com.hibernate.entidades.Usuario</class>
+        <class>com.hibernate.entidades.Prestamo</class>
+        <class>com.hibernate.entidades.NombreCompleto</class>
+        <class>com.hibernate.entidades.PrestamoId</class>
         <properties>
-            <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/unidadBiblioteca?createDatabaseIfNotExist=true" />
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/Biblioteca1?createDatabaseIfNotExist=true" />
             <property name="jakarta.persistence.jdbc.user" value="root" />
             <property name="jakarta.persistence.jdbc.password" value="1234" />
             <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver" />
