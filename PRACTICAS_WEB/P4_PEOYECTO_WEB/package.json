@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/IESPSUR/ud1-pr2-proyecto-base-sistema-de-reservas-manuel-ir#readme",
   "dependencies": {
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "express-session": "^1.19.0"
   }
 }

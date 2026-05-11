@@ -121,16 +121,16 @@ La carpeta `data/` se encuentra dentro de `src/`, contiene los archivos `usuario
 
 ### 5.5. Código modificado en server.js
 
-**Parte 1: Imports, rutas a archivos JSON y funciones auxiliares (líneas 1-40)**
+**Imports, rutas a archivos JSON y funciones auxiliares:**
 ![Modificaciones Server.js 1](./public/img/CapturasAC8/AC8%20-%20MOD%20Server.js%201.png)
 
-**Parte 2: Carga de datos iniciales (líneas 42-48)**
+**Carga de datos iniciales:**
 ![Modificaciones Server.js 2](./public/img/CapturasAC8/AC8%20-%20MOD%20Server.js%202.png)
 
-**Parte 3: Ruta POST /login (líneas 58-83)**
+**Ruta POST /login:**
 ![Modificaciones Server.js 3](./public/img/CapturasAC8/AC8%20-%20MOD%20Server.js%203.png)
 
-**Parte 4: Ruta POST /reserva con persistencia (líneas 87-134)**
+**Ruta POST /reserva con persistencia:**
 ![Modificaciones Server.js 4](./public/img/CapturasAC8/AC8%20-%20MOD%20Server.js%204.png)
 
 ---

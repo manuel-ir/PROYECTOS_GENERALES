@@ -1,23 +1,37 @@
 [
   {
-    "id": 1778426554034,
-    "fecha": "2026-06-24T14:00",
-    "evento": "50",
-    "entradas": 2,
-    "extras": "50",
-    "comentarios": "Aguante Rammstein!",
-    "fechaCreacion": "2026-05-10T15:22:34.034Z"
-  },
-  {
-    "id": 1778494137188,
-    "fecha": "2026-10-30T18:00",
-    "evento": "75",
-    "entradas": 1,
-    "extras": [
+    "fecha": "2026-06-30T20:00",
+    "tipo": "50",
+    "unidades": "1",
+    "precio": [
       "15",
       "8"
     ],
-    "comentarios": "",
-    "fechaCreacion": "2026-05-11T10:08:57.188Z"
+    "comentarios": "Slipknot"
+  },
+  {
+    "fecha": "2026-05-31T18:00",
+    "tipo": "40",
+    "unidades": "2",
+    "precio": [
+      "15",
+      "50",
+      "8"
+    ],
+    "comentarios": "Hamlet"
+  },
+  {
+    "fecha": "2026-07-10T13:00",
+    "tipo": "50",
+    "unidades": "1",
+    "precio": "8",
+    "comentarios": "Metallica\r\n"
+  },
+  {
+    "fecha": "2026-12-15T22:00",
+    "tipo": "75",
+    "unidades": "1",
+    "precio": "15",
+    "comentarios": "Jazz"
   }
 ]

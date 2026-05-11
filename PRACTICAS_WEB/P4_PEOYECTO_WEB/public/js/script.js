@@ -1,5 +1,8 @@
 document.addEventListener("DOMContentLoaded", function() {
 
+    // Obtener el ID de la página actual
+    const pageId = document.body.id;
+
     // LÓGICA COMÚN A VARIAS PÁGINAS 
 
     // LÓGICA MODO OSCURO
@@ -20,12 +23,16 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
     
-    // LÓGICA BOTÓN CERRAR SESIÓN 
+    // LÓGICA BOTÓN CERRAR SESIÓN
     const botonLogout = document.getElementById("boton-logout");
     if (botonLogout) {
         botonLogout.addEventListener("click", function() {
-            localStorage.clear();
-            window.location.href = "login.html";
+            fetch('/logout')
+                .then(response => response.text())
+                .then(data => {
+                    localStorage.clear();
+                    window.location.href = "login.html";
+                });
         });
     }
 
@@ -89,7 +96,8 @@ document.addEventListener("DOMContentLoaded", function() {
     
         // Añade el mensaje de bienvenida
         const mensajeBienvenida = document.getElementById("mensaje-bienvenida");
-        if (mensajeBienvenida) {
+        const usuario = localStorage.getItem("usuario");
+        if (mensajeBienvenida && usuario) {
             mensajeBienvenida.textContent = `Bienvenido/a, ${usuario}. Gestiona tu reserva.`;
         }
 
@@ -137,49 +145,8 @@ document.addEventListener("DOMContentLoaded", function() {
             checkbox.addEventListener("change", calcularTotal);
         });
 
-        // MODIFICACIONES UD2_AC7
-        // Se comenta la lógica de envío del cliente para permitir el POST al servidor
-        
-        
-        // Evento para enviar el formulario
-        formReserva.addEventListener("submit", function(event) {
-            event.preventDefault(); 
-            
-            // Validación básica
-            if (selectEvento.value === "") {
-                alert("Por favor, selecciona un evento.");
-                return;
-            }
-
-            // Obtiene el texto del evento seleccionado
-            const eventoTexto = selectEvento.options[selectEvento.selectedIndex].text;
-            const extrasSeleccionados = [];
-
-            // Recorre los extras para obtener sus nombres
-            checkboxesExtra.forEach(function(checkbox) {
-                if (checkbox.checked) {
-                    const label = document.querySelector(`label[for="${checkbox.id}"]`);
-                    extrasSeleccionados.push(label.textContent);
-                }
-            });
-
-            // Crea un obejeto con los datos de la reserva
-            const datosReserva = {
-                evento: eventoTexto,
-                entradas: inputEntradas.value,
-                extras: extrasSeleccionados, 
-                comentarios: textareaComentarios.value,
-                precioTotal: spanPrecioTotal.textContent
-            };
-            
-            // Guarda el objeto como String JSON en localStorage
-            localStorage.setItem("reserva", JSON.stringify(datosReserva));
-            window.location.href = "resumen.html";
-        });
-        
-       
-       console.log("Lógica de cliente desactivada en Reserva para permitir POST al servidor.");
-       // FIN MODIFICACIONES UD2_AC7
+// Los datos se envían directamente al servidor mediante POST
+        // No se previene el envío del formulario
 
         calcularTotal();
     }
