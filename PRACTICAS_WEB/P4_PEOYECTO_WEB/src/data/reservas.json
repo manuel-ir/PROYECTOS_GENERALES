@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1778426554034,
+    "fecha": "2026-06-24T14:00",
+    "evento": "50",
+    "entradas": 2,
+    "extras": "50",
+    "comentarios": "Aguante Rammstein!",
+    "fechaCreacion": "2026-05-10T15:22:34.034Z"
+  },
+  {
+    "id": 1778494137188,
+    "fecha": "2026-10-30T18:00",
+    "evento": "75",
+    "entradas": 1,
+    "extras": [
+      "15",
+      "8"
+    ],
+    "comentarios": "",
+    "fechaCreacion": "2026-05-11T10:08:57.188Z"
+  }
+]
