@@ -67,7 +67,7 @@ El logout no vuelve a pedir credenciales, simplemente elimina el estado de auten
 ![Instalación](./public/img/CapturasAC10/AC10%20-%20Instalacion%20express-session.png)
 
 ### Imports y configuración de sesión en server.js
-![Imports y session](./public/img/CapturasAC10/AC10%20-%20Imports%20y%20configuracion%20session.png)
+![Imports y session](./public/img/CapturasAC10/AC10%20-%20Imports%20y%20configuraci%C3%B3n%20session.png)
 
 ### Inicio del servidor
 ![Inicio Servidor](./public/img/CapturasAC10/AC10%20-%20Inicio%20Servidor.png)
