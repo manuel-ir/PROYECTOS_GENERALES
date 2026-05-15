@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eliminar Reserva</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Eliminar Reserva</h1>
+            <div>
+                <a href="/index.html" class="btn btn-secondary">Volver al inicio</a>
+                <a href="/reserva.html" class="btn btn-secondary">Nueva reserva</a>
+            </div>
+        </header>
+
+        <form method="POST" action="/reservas/eliminar">
+            <div class="form-group">
+                <label for="id">ID de la Reserva a Eliminar:</label>
+                <input type="number" id="id" name="id" placeholder="Ej: 1" required>
+            </div>
+            
+            <button type="submit" class="btn btn-primary" onclick="return confirm('¿Estás seguro de que quieres eliminar esta reserva?');">Eliminar Reserva</button>
+        </form>
+    </div>
+
+</body>
+</html>

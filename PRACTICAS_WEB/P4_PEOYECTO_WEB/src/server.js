@@ -3,11 +3,14 @@ import session from 'express-session';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import Reserva from './models/Reserva.js';
-import { leerReservas, guardarReservas } from './services/reservasService.js';
+import { guardarReserva, obtenerReservasPorUsuario, actualizarReserva, eliminarReserva } from './services/reservasService.js';
 import { leerUsuarios } from './services/usuariosService.js';
 import { requiereAutenticacion } from './middlewares/authMiddleware.js';
+import { comprobarConexion } from './config/db.js';
 
 const app = express();
+
+comprobarConexion();
 const PORT = 3000;
 
 const __filename = fileURLToPath(import.meta.url);
@@ -20,12 +23,6 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }));
-
-// Carga de datos iniciales
-console.log('=== CARGA DE DATOS INICIALES ===');
-const reservas = leerReservas();
-console.log(`Reservas cargadas: ${reservas.length}`);
-console.log('===============================');
 
 // Middleware para procesar datos de formularios
 app.use(express.urlencoded({ extended: true }));
@@ -61,67 +58,110 @@ app.post('/login', (req, res) => {
 });
 
 // Ruta POST para crear reserva (protegida)
-app.post('/reserva', requiereAutenticacion, (req, res) => {
-    const evento = req.body.evento;
-    const entradas = req.body.entradas;
-    const extras = req.body.extras;
-    const fecha = req.body.fecha || '';
-    const comentarios = req.body.comentarios || '';
+app.post('/reserva', requiereAutenticacion, async (req, res) => {
+    try {
+        const evento = req.body.evento;
+        const entradas = req.body.entradas;
+        const extras = req.body.extras;
+        const fecha = req.body.fecha || '';
+        const precio = req.body.precio || 0;
 
-    console.log('Datos reserva recibidos:', req.body);
+        console.log('Datos reserva recibidos:', req.body);
 
-    if (!evento || !entradas) {
-        res.send('Faltan datos obligatorios en la reserva (evento o número de entradas).');
-        return;
+        if (!evento || !entradas) {
+            res.send('Faltan datos obligatorios en la reserva (evento o número de entradas).');
+            return;
+        }
+
+        if (Number(entradas) <= 0) {
+            res.send('El número de entradas debe ser mayor que cero.');
+            return;
+        }
+
+        let extrasTexto = String(extras);
+
+        if (extrasTexto.includes('50') && Number(entradas) < 2) {
+            res.send('Error: Para acceder al Backstage debes reservar al menos 2 entradas.');
+            return;
+        }
+
+        const usuario = req.session.usuario;
+        const nuevaReserva = new Reserva(fecha, evento, entradas, precio, usuario);
+
+        const idGenerado = await guardarReserva(nuevaReserva);
+
+        console.log(`Reserva guardada con ID: ${idGenerado}`);
+
+        res.send(`
+            <h1>Reserva procesada</h1>
+            <p>Reserva guardada correctamente en MySQL.</p>
+            <p>Identificador de la reserva: ${idGenerado}</p>
+            <a href="/index.html">Volver al inicio</a>
+        `);
+    } catch (error) {
+        console.error('Error al guardar la reserva:', error);
+        res.status(500).send('Error al guardar la reserva en la base de datos.');
     }
-
-    if (Number(entradas) <= 0) {
-        res.send('El número de entradas debe ser mayor que cero.');
-        return;
-    }
-
-    let extrasTexto = String(extras);
-
-    if (extrasTexto.includes('50') && Number(entradas) < 2) {
-        res.send('Error: Para acceder al Backstage debes reservar al menos 2 entradas.');
-        return;
-    }
-
-    const reservasActuales = leerReservas();
-    const nuevaReserva = new Reserva(fecha, evento, entradas, extras, comentarios);
-    reservasActuales.push(nuevaReserva);
-    guardarReservas(reservasActuales);
-
-    console.log(`Reserva guardada. Total de reservas: ${reservasActuales.length}`);
-
-    res.send(`<h1>Reserva procesada</h1><p>Reserva guardada correctamente. Total de reservas: ${reservasActuales.length}</p><a href="/index.html">Volver al inicio</a>`);
 });
 
-// Ruta GET para ver todas las reservas
-app.get('/ver-reservas', (req, res) => {
-    const reservas = leerReservas();
-
-    if (reservas.length === 0) {
-        res.send('<h1>Reservas</h1><p>No hay ninguna reserva guardada.</p><a href="/index.html">Volver</a>');
-        return;
+// Ruta GET para consultar reservas del usuario autenticado
+app.get('/reservas', requiereAutenticacion, async (req, res) => {
+    try {
+        const usuario = req.session.usuario;
+        const reservas = await obtenerReservasPorUsuario(usuario);
+        res.json(reservas);
+    } catch (error) {
+        console.error('Error al consultar reservas:', error);
+        res.status(500).send('Error al consultar las reservas.');
     }
+});
 
-    let html = '<h1>Reservas Guardadas</h1>';
-    html += '<p>Total: ' + reservas.length + ' reserva(s)</p>';
-    html += '<ul>';
+// Ruta POST para actualizar una reserva
+app.post('/reservas/actualizar', requiereAutenticacion, async (req, res) => {
+    try {
+        const { id, fecha, tipo, unidades, precio } = req.body;
 
-    reservas.forEach(reserva => {
-        html += '<li>';
-        html += '<strong>ID:</strong> ' + reserva.id + ' | ';
-        html += '<strong>Evento:</strong> ' + reserva.tipo + ' | ';
-        html += '<strong>Entradas:</strong> ' + reserva.unidades;
-        html += '</li>';
-    });
+        if (!id || !fecha || !tipo || !unidades || !precio) {
+            return res.status(400).send('Faltan datos para actualizar la reserva.');
+        }
 
-    html += '</ul>';
-    html += '<a href="/index.html">Volver al inicio</a>';
+        const usuario = req.session.usuario;
+        const reservaActualizada = new Reserva(fecha, tipo, unidades, precio, usuario);
 
-    res.send(html);
+        const filasModificadas = await actualizarReserva(id, reservaActualizada, usuario);
+
+        if (filasModificadas === 0) {
+            return res.status(404).send('No se ha actualizado ninguna reserva. Puede que no exista o que no pertenezca al usuario autenticado.');
+        }
+
+        res.send('Reserva actualizada correctamente.');
+    } catch (error) {
+        console.error('Error al actualizar reserva:', error);
+        res.status(500).send('Error al actualizar la reserva.');
+    }
+});
+
+// Ruta POST para eliminar una reserva
+app.post('/reservas/eliminar', requiereAutenticacion, async (req, res) => {
+    try {
+        const { id } = req.body;
+
+        if (!id) {
+            return res.status(400).send('Falta el id de la reserva que se quiere eliminar.');
+        }
+
+        const usuario = req.session.usuario;
+        const filasEliminadas = await eliminarReserva(id, usuario);
+
+        if (filasEliminadas === 0) {
+            return res.status(404).send('No se ha eliminado ninguna reserva. Puede que no exista o que no pertenezca al usuario autenticado.');
+        }
+
+        res.send('Reserva eliminada correctamente.');
+    } catch (error) {
+        console.error('Error al eliminar reserva:', error);
+        res.status(500).send('Error al eliminar la reserva.');
+    }
 });
 
 // Ruta para cerrar sesión

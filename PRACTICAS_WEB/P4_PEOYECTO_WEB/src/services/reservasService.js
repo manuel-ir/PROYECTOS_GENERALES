@@ -1,21 +1,61 @@
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import { pool } from '../config/db.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const rutaReservas = path.join(__dirname, '../data/reservas.json');
+export async function guardarReserva(reserva) {
+    const sql = `
+        INSERT INTO reservas (fecha, tipo, unidades, precio, usuario)
+        VALUES (?, ?, ?, ?, ?)
+    `;
 
-export function leerReservas() {
-    const datos = fs.readFileSync(rutaReservas, 'utf8');
-    return JSON.parse(datos);
+    const valores = [
+        reserva.fecha,
+        reserva.tipo,
+        reserva.unidades,
+        reserva.precio,
+        reserva.usuario
+    ];
+
+    const [resultado] = await pool.execute(sql, valores);
+    return resultado.insertId;
 }
 
-export function guardarReservas(reservas) {
-    const texto = JSON.stringify(reservas, null, 2);
-    fs.writeFile(rutaReservas, texto, (err) => {
-        if (err) {
-            console.error('Error al guardar:', err);
-        }
-    });
+export async function obtenerReservasPorUsuario(usuario) {
+    const sql = `
+        SELECT id, fecha, tipo, unidades, precio, usuario
+        FROM reservas
+        WHERE usuario = ?
+        ORDER BY id DESC
+    `;
+
+    const [filas] = await pool.execute(sql, [usuario]);
+    return filas;
+}
+
+export async function actualizarReserva(id, reserva, usuario) {
+    const sql = `
+        UPDATE reservas
+        SET fecha = ?, tipo = ?, unidades = ?, precio = ?
+        WHERE id = ? AND usuario = ?
+    `;
+
+    const valores = [
+        reserva.fecha,
+        reserva.tipo,
+        reserva.unidades,
+        reserva.precio,
+        id,
+        usuario
+    ];
+
+    const [resultado] = await pool.execute(sql, valores);
+    return resultado.affectedRows;
+}
+
+export async function eliminarReserva(id, usuario) {
+    const sql = `
+        DELETE FROM reservas
+        WHERE id = ? AND usuario = ?
+    `;
+
+    const [resultado] = await pool.execute(sql, [id, usuario]);
+    return resultado.affectedRows;
 }

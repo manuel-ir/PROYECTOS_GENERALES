@@ -107,6 +107,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const inputEntradas = document.getElementById("entradas");
         const checkboxesExtra = document.querySelectorAll(".extra"); 
         const spanPrecioTotal = document.getElementById("precio-total");
+        const inputPrecio = document.getElementById("precio");
         const textareaComentarios = document.getElementById("comentarios");
         const spanContador = document.getElementById("contador-caracteres");
 
@@ -129,6 +130,7 @@ document.addEventListener("DOMContentLoaded", function() {
             // Calcula el precio total de los extras marcados
             let precioTotal = (precioEvento + totalExtras) * numEntradas;
             spanPrecioTotal.textContent = precioTotal.toFixed(2);
+            inputPrecio.value = precioTotal.toFixed(2);
         }
 
         // Contador de caracteres

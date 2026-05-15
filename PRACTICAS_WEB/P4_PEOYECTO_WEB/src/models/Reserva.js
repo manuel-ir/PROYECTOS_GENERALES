@@ -1,9 +1,9 @@
 export default class Reserva {
-    constructor(fecha, tipo, unidades, precio, comentarios) {
+    constructor(fecha, tipo, unidades, precio, usuario) {
         this.fecha = fecha;
         this.tipo = tipo;
-        this.unidades = unidades;
-        this.precio = precio;
-        this.comentarios = comentarios;
+        this.unidades = Number(unidades);
+        this.precio = Number(precio);
+        this.usuario = usuario;
     }
 }
