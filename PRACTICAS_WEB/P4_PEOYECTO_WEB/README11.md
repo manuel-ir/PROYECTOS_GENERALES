@@ -232,20 +232,19 @@ Esto significa que，即使 el usuario conoce el id de otra reserva, la consulta
 
 ### Inserción correcta de una reserva
 ![Reserva procesada correctamente](./capturas/ReservaProcesada.png)
-![Datos de la reserva en DBeaver](./capturas/DatosReservaDBeaver.png)
+![Datos de la reserva guardados en DBeaver](./capturas/DatosReservaDBeaver.png)
 
 ### Consulta de reservas desde /reservas
 ![Consulta de reservas en formato JSON](./capturas/ConsultaReservasJSON.png)
 
 ### Actualización correcta de una reserva
 ![Formulario de actualización](./capturas/ActualizarReserva.png)
-![Resultado de la actualización](./capturas/ResultadoActualizarReserva.png)
-![Reserva actualizada y eliminada en DBeaver](./capturas/ReservaEliminadaYActualizadaDBeaver.png)
 
 ### Eliminación correcta de una reserva
 ![Formulario de eliminación](./capturas/EliminarReserva.png)
 ![Confirmación de eliminación](./capturas/MensajeConfirmacionEliminarReserva.png)
 ![Mensaje de reserva eliminada](./capturas/MensajeReservaEliminada.png)
+![Reservas actualizadas y eliminadas en DBeaver](./capturas/ReservaEliminadaYActualizadaDBeaver.png)
 
 ### Bloqueo de operación sin sesión activa
 ![Acceso denegado sin sesión](./capturas/AccesoDenegadoSinIniciarSesion.png)
